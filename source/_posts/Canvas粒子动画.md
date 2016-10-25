@@ -6,13 +6,18 @@ tags: Canvas
 
 首先来看下我们准备要做的粒子动画效果是怎么样的~
 
-![](/images/canvas_lizi/0.gif)
+![](/images/canvas_lizi/2.gif)
 
 <!-- more -->
 
+也可能是这样的：
+
+![](/images/canvas_lizi/0.gif)
+
+或许是这样的：
+
 ![](/images/canvas_lizi/1.gif)
 
-![](/images/canvas_lizi/2.gif)
 
 是不是很酷炫呢？那如何去实现类似上面的粒子动画甚至根据自己的喜好去做更多其他轨迹的动画呢~请看下面详细的讲解。
 
