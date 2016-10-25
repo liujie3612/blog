@@ -1,4 +1,4 @@
-{% macro render(post, is_index, post_extra_class) %}
+{% macro render(post, is_index, is_pv, post_extra_class) %}
 
   {% set headlessPost = Array.prototype.indexOf.call(['quote', 'picture'], post.type) > -1 %}
   {% set navlessPost = headlessPost %}
@@ -128,6 +128,12 @@
               <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>{{ theme.busuanzi_count.page_pv_footer }}
               </span>
           {% endif %}
+
+           {% if is_pv %}
+            <span>&nbsp; | &nbsp;
+              <span id="busuanzi_value_page_pv" ></span>次阅读
+            </span>    
+           {% endif %}
         </div>
       </header>
     {% endif %}

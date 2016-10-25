@@ -29,11 +29,11 @@ canonical: true
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
   home: /
-  #categories: /categories
+  # categories: /categories
   #about: /about
   archives: /archives
   tags: /tags
-  schedule: /schedule
+  # schedule: /schedule
   #commonweal: /404.html
 
 
@@ -61,9 +61,9 @@ menu_icons:
 # ---------------------------------------------------------------
 
 # Schemes
-scheme: Muse
-#scheme: Mist
-#scheme: Pisces
+# scheme: Muse
+# scheme: Mist
+scheme: Pisces
 
 
 # ---------------------------------------------------------------
@@ -204,7 +204,7 @@ custom_logo:
 # Available value:
 #    normal | night | night eighties | night blue | night bright
 # https://github.com/chriskempson/tomorrow-theme
-highlight_theme: normal
+highlight_theme: night bright
 
 
 # Automatically scroll page to section which is under <!-- more --> mark.
@@ -416,3 +416,6 @@ images: images
 
 # Theme version
 version: 5.0.2
+
+# Swiftype Search Key
+swiftype_key: sWozuiLGz3xV4CvqazrZ
