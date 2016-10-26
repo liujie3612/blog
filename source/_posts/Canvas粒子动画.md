@@ -5,9 +5,7 @@ tags: Canvas
 ---
 
 首先来看下我们准备要做的粒子动画效果是怎么样的~
-
 ![](/images/canvas_lizi/2.gif)
-
 <!-- more -->
 
 也可能是这样的：

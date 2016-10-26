@@ -72,7 +72,8 @@
           {% if theme.social %}
             {% for name, link in theme.social %}
               <span class="links-of-author-item">
-                <a href="{{ link }}" target="_blank" title="{{ name }}">
+                {# <a href="{{ link }}" target="_blank" title="{{ name }}"> #}
+                <a href="{{ link }}" target="_blank" rel="external nofollow">{{ name }}</a>
                   {% if theme.social_icons.enable %}
                     <i class="fa fa-fw fa-{{ theme.social_icons[name] | default('globe') | lower }}"></i>
                   {% endif %}

@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 每天进步一点点
-subtitle:
-description: 既然决定了远方，便只顾风雨兼程
+title: LiuJie's blog
+subtitle: 
+description: 每天进步一点点
 author: Liu Jie
 language: zh-Hans
 timezone:
@@ -84,9 +84,12 @@ avatar: /images/avtar.jpg
 # 多说评论
 duoshuo_shortname: liujiefront
 
-# 百度
+# seo
+sitemap:
+  path: sitemap.xml
 baidusitemap:
-path: baidusitemap.xml
+  path: baidusitemap.xml
+
 
 
 

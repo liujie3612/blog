@@ -22,23 +22,23 @@
   <meta name="360-site-verification" content="{{ theme.qihu_site_verification }}" />
 {% endif %}
 
-
-{% if theme.fancybox %}
+<!-- {% if theme.fancybox %}
   {% set fancybox_css_uri = url_for(theme.vendors._internal + '/fancybox/source/jquery.fancybox.css?v=2.1.5') %}
   {% if theme.vendors.fancybox_css %}
     {% set fancybox_css_uri = theme.vendors.fancybox_css %}
   {% endif %}
   <link href="{{ fancybox_css_uri }}" rel="stylesheet" type="text/css" />
-{% endif %}
+{% endif %}  -->
 
-{% include "./head/external-fonts.swig" %}
+{# {% include "./head/external-fonts.swig" %} #}
 
-{% set font_awesome_uri = url_for(theme.vendors._internal + '/font-awesome/css/font-awesome.min.css?v=4.4.0') %}
-{% if theme.vendors.fontawesome %}
-  {% set font_awesome_uri = theme.vendors.fontawesome %}
-{% endif %}
+
+{# {% set font_awesome_uri = url_for(theme.vendors._internal + '/font-awesome/css/font-awesome.min.css?v=4.4.0') %} #}
+<!-- {% if theme.vendors.fontawesome %}
+    {% set font_awesome_uri = theme.vendors.fontawesome %}
+  {% endif %} -->  
+
 <link href="{{ font_awesome_uri }}" rel="stylesheet" type="text/css" />
-
 <link href="{{ url_for(theme.css) }}/main.css?v={{ theme.version }}" rel="stylesheet" type="text/css" />
 
 {% if page.keywords %}
@@ -62,7 +62,6 @@
   <link rel="shortcut icon" type="image/x-icon" href="{{ url_for(theme.favicon) }}?v={{ theme.version }}" />
 {% endif %}
 
-
 {% if theme.facebook_sdk.enable and theme.facebook_sdk.webmaster %}
   <meta property="fb:admins" content="{{ theme.facebook_sdk.fb_admin }}" />
   <meta property="fb:app_id" content="{{ theme.facebook_sdk.app_id }}" />
@@ -78,7 +77,6 @@
   })
 }}
 
-
 {# Export some HEXO Configurations to Front-End #}
 <script type="text/javascript" id="hexo.configuration">
   var NexT = window.NexT || {};
@@ -93,7 +91,6 @@
     }
   };
 </script>
-
 
 {# Canonical, good for google search engine (SEO) : https://support.google.com/webmasters/answer/139066 #}
 {% if theme.canonical %}
