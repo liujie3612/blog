@@ -22,21 +22,6 @@
   </a>
 </div>
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=64634&auto=1&height=66"></iframe>
-<div class="ds-share" data-thread-key="此处请替换为当前文章的thread-key" data-title="此处请替换为分享时显示的标题" data-images="此处请替换为分享时显示的图片的链接地址" data-content="此处请替换为分享时显示的内容" data-url="此处请替换为分享时显示的链接地址">
-    <div class="ds-share-inline">
-      <ul  class="ds-share-icons-32">
-        
-        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
-        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
-        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
-        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
-        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-        
-      </ul>
-      <div class="ds-share-icons-more">
-      </div>
-    </div>
-</div>
 <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 本站总访问量 <span id="busuanzi_value_site_pv"></span> &nbsp;&nbsp;&nbsp;
 您是第<span id="busuanzi_value_site_uv"></span>个来到的小伙伴
