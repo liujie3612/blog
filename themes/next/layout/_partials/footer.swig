@@ -1,10 +1,10 @@
-<div class="ds-share flat" data-thread-key="此处请替换为当前文章的thread-key" data-title="此处请替换为分享时显示的标题" data-images="此处请替换为分享时显示的图片的链接地址" data-content="此处请替换为分享时显示的内容" data-url="此处请替换为分享时显示的链接地址">
+<!-- <div class="ds-share flat" data-thread-key="此处请替换为当前文章的thread-key" data-title="此处请替换为分享时显示的标题" data-images="此处请替换为分享时显示的图片的链接地址" data-content="此处请替换为分享时显示的内容" data-url="此处请替换为分享时显示的链接地址">
     <div class="ds-share-aside-right">
       <div class="ds-share-aside-inner">
       </div>
       <div class="ds-share-aside-toggle">分享到</div>
     </div>
-</div>
+</div> -->
 <div class="copyright" >
   {% set current = date(Date.now(), "YYYY") %}
   &copy; {% if theme.since and theme.since != current %} {{ theme.since }} - {% endif %}
