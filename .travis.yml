@@ -8,7 +8,7 @@ install:
 after_script:
   - cd ./public
   - git init
-  - git config --global user.name "liujie"
+  - git config --global user.name "liujie3612"
   - git config --global user.email liujie@wilddog.com
   - git add .
   - git commit -m "Update docs"
