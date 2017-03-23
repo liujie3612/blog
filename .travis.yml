@@ -1,18 +1,17 @@
 language: node_js
 node_js: stable
+
 branches:
   only:
   - master
-
 before_install:
-- openssl aes-256-cbc -K $encrypted_71d2c9545648_key -iv $encrypted_71d2c9545648_iv
-  -in id_rsa.enc -out ~/.ssh/id_rsa -d
-- chmod 600 ~/.ssh/id_rsa
-- eval $(ssh-agent)
-- ssh-add ~/.ssh/id_rsa
-- cp ssh_config ~/.ssh/config
-- git config --global user.name "liujie"
-- git config --global user.email liujie@wilddog.com
+  - cd ./public
+  - git init
+  - git config --global user.name "liujie"
+  - git config --global user.email liujie@wilddog.com
+  - git add .
+  - git commit -m "Update docs"
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
 
 install:
 - npm install
@@ -21,5 +20,6 @@ script:
 - hexo clean
 - hexo generate
 
-after_success:
-- hexo deploy
+env:
+ global:
+   - GH_REF: github.com/liujie3612/liujie3612.github.io.git

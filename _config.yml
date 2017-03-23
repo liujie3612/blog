@@ -75,6 +75,7 @@ deploy:
 - type: git
   repo: git@github.com:liujie3612/liujie3612.github.io
   branch: master
+  message: push by hexo-deploy
 
 # 头像
 avatar: /images/avtar.jpg
