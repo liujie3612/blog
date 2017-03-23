@@ -14,6 +14,7 @@ script:
   - hexo clean && hexo g #生成
 
 after_script:
+  - cd ./public
   - git init
   - git config user.name "liujie3612"  #修改name
   - git config user.email "liujie@wilddog.com"  #修改email
