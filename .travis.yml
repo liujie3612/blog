@@ -1,12 +1,12 @@
 language: node_js  #设置语言
 node_js: stable  #设置相应的版本
 
-# before_install:
-# - npm install -g hexo
-# - npm install -g hexo-cli
+before_install:
+- npm install -g hexo
+- npm install -g hexo-cli
 
-# install:
-#   - npm install
+install:
+  - npm install
 
 script:
   # - hexo clean #清除
