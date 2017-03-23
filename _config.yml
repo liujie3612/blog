@@ -69,13 +69,13 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-# - type: git
-#   repo: git@www.liujiefront.com:/home/git/hexo.git
-#   branch: master
 - type: git
-  repo: git@github.com:liujie3612/liujie3612.github.io
+  repo: git@47.92.28.17:/var/repo/blog.git
   branch: master
-  message: push by hexo-deploy
+  
+# - type: git
+#   repo: git@github.com:liujie3612/liujie3612.github.io
+#   branch: master
 
 # 头像
 avatar: /images/avtar.jpg
