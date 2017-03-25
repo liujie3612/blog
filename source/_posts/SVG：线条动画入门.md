@@ -19,7 +19,7 @@ tags:
 SVG 指可伸缩矢量图形 (Scalable Vector Graphics)，因此，SVG 图像在放大或改变尺寸的情况下其图形质量不会有所损失。SVG 除了制作图像之外，还有各种用途，比如动画、 ICONFONT等。
 
 兼容性
-![](/images/svg/jianrongxing@2x.png)
+![](/images/svg/jianrongxing.png)
 
 ### 1.2 path(路径)
 
@@ -41,6 +41,17 @@ SVG 指可伸缩矢量图形 (Scalable Vector Graphics)，因此，SVG 图像在
 - 属性 `stroke-dasharray`：该值可能由两个值合写，使用英文逗号(`,`)分隔，第一个值是画出的每段实线线段的长度，第二个值是各段之间空隙的长度。如果无分隔，则说明两个值都是一样大小的。
 - 属性 `stroke-dashoffset`：指定每个实线线段的起始偏移量。正数从路径起始点向前偏移，负数则向后。
 举例而言，如果要实现类似 CSS 中 `border-style: dotted`; 这样的虚线效果，则可以设置 `stroke-dasharray:5,10`，第一个数字表示每一段实线长度为 `5`，第二个表示实线直接间隔长度为 `10`。
+
+![](/images/svg/dash.png)
+
+``` html
+<svg>
+ <path d="M100 100, A120 120, -45 0 1, 300 300 A120 120, -45 0 1, 100 100"
+  stroke="#05D380" stroke-width="2"
+  fill="none"
+  stroke-dasharray="5,10"/>
+</svg>
+```
 
 ### 1.4 CSS 控制
 
@@ -72,7 +83,7 @@ SVG 指可伸缩矢量图形 (Scalable Vector Graphics)，因此，SVG 图像在
 ### 2.1 你有一个SVG图形
 
 <!-- ![](/images/svg/sharp.png) -->
-<img src="/images/svg/sharp.png" width="300">
+<img src="/images/svg/shape.png" width="300">
 
 ### 2.2 这个图形必须要有一个线条`stroke`属性
 
@@ -85,20 +96,19 @@ SVG 指可伸缩矢量图形 (Scalable Vector Graphics)，因此，SVG 图像在
 
 ``` html
 <svg ...>    <path class="path" stroke="#000000" ... >  </svg>
-
-```
-``` html
-<svg ...>    <path class="path" stroke="#000000" ... >  </svg>
+.path {
+  stroke-dasharray: 20;
+}
 ```
 
 这是让虚线里的每个小线段长度为20px。
 
 <!-- ![](/images/svg/dash.png) -->
-<img src="/images/svg/dash.png" width="300">
+<img src="/images/svg/dashed-shape.png">
 
 ### 2.4 可以让虚线小段的长度变得更长…
 
-``` html
+``` css
 .path {
   stroke-dasharray: 100;
 ```
