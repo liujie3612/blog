@@ -84,6 +84,7 @@ avatar: /images/avtar.jpg
 # 多说评论
 # duoshuo_shortname: liujiefront
 
+
 # seo
 sitemap:
   path: sitemap.xml
