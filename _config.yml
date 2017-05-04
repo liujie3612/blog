@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: LiuJie's blog
+title: 杰杰无敌
 subtitle: 
-description: 每天进步一点点
+description: 每天进步一点点,杰杰无敌,liujiefront,liujie,刘杰的个人blog
 author: Liu Jie
 language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://liujiefront.com
+url: http://blog.liujiefront.com/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -84,23 +84,23 @@ avatar: /images/avtar.jpg
 # 多说评论
 # duoshuo_shortname: liujiefront
 
+index_generator:
+  per_page: 5
+
+archive_generator:
+  per_page: 20
+  yearly: true·
+  monthly: true
+
+tag_generator:
+  per_page: 10
+
 
 # seo
 sitemap:
   path: sitemap.xml
 baidusitemap:
   path: baidusitemap.xml
-
-index_generator:
-  per_page: 5
-
-archive_generator:
-  per_page: 20
-  yearly: true
-  monthly: true
-
-tag_generator:
-  per_page: 10
 
 
 

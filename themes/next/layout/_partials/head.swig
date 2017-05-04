@@ -22,13 +22,13 @@
   <meta name="360-site-verification" content="{{ theme.qihu_site_verification }}" />
 {% endif %}
 
-<!-- {% if theme.fancybox %}
+{% if theme.fancybox %}
   {% set fancybox_css_uri = url_for(theme.vendors._internal + '/fancybox/source/jquery.fancybox.css?v=2.1.5') %}
   {% if theme.vendors.fancybox_css %}
     {% set fancybox_css_uri = theme.vendors.fancybox_css %}
   {% endif %}
   <link href="{{ fancybox_css_uri }}" rel="stylesheet" type="text/css" />
-{% endif %}  -->
+{% endif %}  
 
 {# {% include "./head/external-fonts.swig" %} #}
 
