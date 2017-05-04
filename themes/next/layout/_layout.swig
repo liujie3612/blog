@@ -85,7 +85,6 @@
   {% include scheme_script %}
 
   {% block script_extra %}{% endblock %}
-
   {% include '_scripts/boostrap.swig' %}
   {% include '_scripts/third-party/canvas.swig' %}
   {% include '_scripts/third-party/comments.swig' %}
