@@ -30,7 +30,7 @@
 <html class="{{ html_class | lower }}">
 <head>
   {% include '_partials/head.swig' %}
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %} {{ theme.keywords }} - {{ config.title }} - {{ theme.description }} {% endblock %}</title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="{{ config.language }}">
