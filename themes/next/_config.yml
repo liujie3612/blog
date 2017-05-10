@@ -6,7 +6,7 @@
 favicon: /favicon.ico
 
 # Set default keywords (Use a comma to separate)
-keywords: "liujiefront,liujie"
+keywords: "liujiefront,liujie,javascript,前端开发,每天进步一点点,刘杰的个人blog,杰杰无敌"
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
@@ -43,7 +43,7 @@ menu:
 #   Key is the name of menu item and value is the name of FontAwsome icon. Key is case-senstive.
 #   When an question mask icon presenting up means that the item has no mapping icon.
 menu_icons:
-  enable: false
+  enable: true
   #KeyMapsToMenuItemKey: NameOfTheIconFromFontAwesome
   home: home
   about: user
@@ -421,3 +421,4 @@ version: 5.0.2
 # swiftype_key: sWozuiLGz3xV4CvqazrZ
 
 canvas_nest: true
+

@@ -1,3 +1,25 @@
+<!--
+                           _ooOoo_
+                          o8888888o
+                          88" . "88
+                          (| -_- |)
+                          O\  =  /O
+                       ____/`---'\____
+                     .'  \\|     |//  `.
+                    /  \\|||  :  |||//  \
+                   /  _||||| -:- |||||-  \
+                   |   | \\\  -  /// |   |
+                   | \_|  ''\---/''  |   |
+                   \  .-\__  `-`  ___/-. /
+                 ___`. .'  /--.--\  `. . __
+              ."" '<  `.___\_<|>_/___.'  >'"".
+             | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+             \  \ `-.   \_ __\ /__ _/   .-` /  /
+        ======`-.____`-.___\_____/___.-`____.-'======
+                           `=---='
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 佛祖保佑       永无BUG  By:- http://blog.liujiefront.com/
+-->
 <!doctype html>
 
 {% set html_class = 'theme-next ' + theme.scheme %}
@@ -8,7 +30,7 @@
 <html class="{{ html_class | lower }}">
 <head>
   {% include '_partials/head.swig' %}
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %} {{ theme.keywords }} - {{ config.title }} - {{ theme.description }} {% endblock %}</title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="{{ config.language }}">
@@ -63,7 +85,6 @@
   {% include scheme_script %}
 
   {% block script_extra %}{% endblock %}
-
   {% include '_scripts/boostrap.swig' %}
   {% include '_scripts/third-party/canvas.swig' %}
   {% include '_scripts/third-party/comments.swig' %}
@@ -73,6 +94,21 @@
   {% include '_scripts/third-party/lean-analytics.swig' %}
   {% include '_scripts/baidu-push.swig' %}
   {% include '_scripts/third-party/schedule.swig' %}
+
+  <script>
+  (function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
 
 </body>
 </html>
