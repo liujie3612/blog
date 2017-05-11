@@ -11,5 +11,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: http://blog.liujiefront.com/sitemap.xml
-Sitemap: http://blog.liujiefront.com/baidusitemap.xml
+Sitemap: https://blog.liujiefront.com/sitemap.xml
+Sitemap: https://blog.liujiefront.com/baidusitemap.xml
