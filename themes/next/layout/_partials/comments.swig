@@ -18,6 +18,18 @@
           <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
         </noscript>
       </div>
+    {% elseif theme.yungentie_shortname %}
+        <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+        <script>
+          var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "",
+          productKey: "aa385535200845f79fb37e9bc46bfeaa",
+          target: "cloud-tie-wrapper"
+          };
+        </script>
+        <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
     {% endif %}
+
   </div>
 {% endif %}

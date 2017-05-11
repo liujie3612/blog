@@ -247,7 +247,13 @@ mathjax:
 #duoshuo_shortname:
 
 # Disqus
-disqus_shortname: blog-liujiefront-com
+# disqus_shortname: blog-liujiefront-com
+
+# yungentie
+# gentie_productKey: aa385535200845f79fb37e9bc46bfeaa
+
+# yungentie
+yungentie_shortname: blog-liujiefront-com
 
 # Baidu Share
 # Available value:
@@ -421,4 +427,6 @@ version: 5.0.2
 # swiftype_key: sWozuiLGz3xV4CvqazrZ
 
 canvas_nest: true
+
+
 
