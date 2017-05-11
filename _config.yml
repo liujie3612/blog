@@ -4,7 +4,7 @@
 
 # Site
 title: 杰杰无敌
-subtitle: 
+subtitle: Liujie'Blog
 description: 每天进步一点点,杰杰无敌,liujiefront,liujie,刘杰的个人blog
 author: Liu Jie
 language: zh-Hans
@@ -12,7 +12,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://blog.liujiefront.com/
+url: https://blog.liujiefront.com/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -101,6 +101,8 @@ sitemap:
   path: sitemap.xml
 baidusitemap:
   path: baidusitemap.xml
+
+
 
 
 
