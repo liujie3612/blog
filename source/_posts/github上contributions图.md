@@ -17,7 +17,7 @@ tags:
 ## 引入文件
 要实现这个模块是需要借助第三方js插件的，这里就有大名鼎鼎的d3。
 
-新建一个html文件，引入所需要的js文件和css文件，这里我用的是bower包
+新建一个html文件，引入所需要的js文件和css文件，这里我用的是bower包,
 
 ```
 <link rel="stylesheet" href="./bower_components/cal-heatmap/cal-heatmap.css" />
@@ -25,6 +25,13 @@ tags:
 <div id="cal-heatmap"></div>
 <script type="text/javascript" src="./bower_components/d3/d3.min.js"></script>
 <script type="text/javascript" src="./bower_components/cal-heatmap/cal-heatmap.min.js"></script>
+```
+当然了也可以使用cdn
+```
+<script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+...
+<script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
 ```
 
 ## 初始化
