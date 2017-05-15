@@ -18,7 +18,7 @@
         ======`-.____`-.___\_____/___.-`____.-'======
                            `=---='
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                 佛祖保佑       永无BUG  By:- http://blog.liujiefront.com/
+                 佛祖保佑       永无BUG  By:- https://blog.liujiefront.com/
 -->
 <!doctype html>
 
