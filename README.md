@@ -9,4 +9,4 @@
 只要提交代码就能同步到 [https://liujie3612.github.io](https://liujie3612.github.io)
 
 ### githook
-执行`npm start`可以同步代码到自己的vps [http://blog.liujiefront.com/](http://blog.liujiefront.com/)
+执行`npm run start`可以同步代码到自己的vps [http://blog.liujiefront.com/](http://blog.liujiefront.com/)
