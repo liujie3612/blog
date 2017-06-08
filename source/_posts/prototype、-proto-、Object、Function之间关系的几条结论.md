@@ -56,7 +56,7 @@ Function.prototype.prototype === undefined;//true
 ``` js
 (typeof Function.__proto__) === function;//true  
 Function.__proto__=== Function.prototype;//true  
-``` 
+```
 Function这个函数对象,由其自身通过Function函数构造的。
 
 ### 结论7：函数也是对象，因为Function.prototype__proto__指向Object.prototype。
