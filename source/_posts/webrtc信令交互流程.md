@@ -17,7 +17,7 @@ WebRTC是HTML5支持的重要特性之一，有了它，不再需要借助音视
 
 * ClientA首先创建`PeerConnection`对象，然后打开本地音视频设备，将音视频数据封装成`MediaStream`添加到`PeerConnection`中。
 
-* ClientA调用`PeerConnection的CreateOffer`方法创建一个用于`offer`的`SDP`对象，`SDP`对象中保存当前音视频的相关参数。ClientA通过`PeerConnection`的`SetLocalDescription`方法将该`SDP`对象保存起来，并通过Signal服务器发送给ClientB。
+* ClientA调用`PeerConnection`的`CreateOffer`方法创建一个用于`offer`的`SDP`对象，`SDP`对象中保存当前音视频的相关参数。ClientA通过`PeerConnection`的`SetLocalDescription`方法将该`SDP`对象保存起来，并通过Signal服务器发送给ClientB。
 
 * ClientB接收到ClientA发送过的`offer SDP`对象，通过`PeerConnection`的`SetRemoteDescription`方法将其保存起来，并调用`PeerConnection`的`CreateAnswer`方法创建一个应答的`SDP`对象，通过`PeerConnection`的`SetLocalDescription`的方法保存该应答`SDP`对象并将它通过Signal服务器发送给ClientA。
 
