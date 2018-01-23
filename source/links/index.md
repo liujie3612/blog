@@ -9,6 +9,7 @@ date: 2016-11-10 20:36:20
 ## Blog friends
 
 - [梦魇小栈](https://blog.ihoey.com/ "梦魇小栈")  -  一位技术大牛的blog
+- [The Flash](http://www.ourfrontend.com/ "The Flash")  -  一位前同事
 
 ***
 

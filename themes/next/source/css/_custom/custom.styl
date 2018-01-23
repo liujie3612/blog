@@ -6,7 +6,15 @@ code{
 }
 
 .pagination {
-    text-align: center
+    text-align: center;
+    border: none;
+    .prev,.next, .page-number {
+        border: none;
+        transition: all .2s;
+        &:hover {
+            color: #eee
+        }
+    }
 }
 
 .footer-inner:before {
@@ -43,13 +51,15 @@ canvas {
     bottom: 72px
     // height: 100%
     height: calc(100% - 150px)
-    
+
 }
 
 .footer {
     margin-top: 0
     padding-top: 50px
     padding-bottom: 40px
+    background: none
+    position:static
 }
 
 .btn:hover, .post-more-link .btn:hover {
@@ -93,6 +103,10 @@ canvas {
 
 .fa-arrow-up:before {
     content: "\f062"
+}
+
+.container {
+    background-image: linear-gradient(to top, #ace0f9 0%, #fff1eb 100%)
 }
 
 @-webkit-keyframes head {
