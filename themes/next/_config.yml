@@ -31,8 +31,9 @@ menu:
   home: /
   # categories: /categories
   #about: /about
-  archives: /archives
   tags: /tags
+  archives: /archives
+  links: /links
   # schedule: /schedule
   #commonweal: /404.html
 
@@ -52,6 +53,7 @@ menu_icons:
   tags: tags
   archives: archive
   commonweal: heartbeat
+  links: link
 
 
 

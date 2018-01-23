@@ -61,7 +61,7 @@
         </div>
         {% if theme.sidebar.display !== 'remove' %}
           {% block sidebar %}{% endblock %}
-        {% endif %}        
+        {% endif %}
       </div>
     </main>
     <footer id="footer" class="footer">
@@ -85,29 +85,14 @@
 
   {% block script_extra %}{% endblock %}
   {% include '_scripts/boostrap.swig' %}
-  {% include '_scripts/third-party/canvas.swig' %}
-  {% include '_scripts/third-party/comments.swig' %}
-  {% include '_scripts/third-party/tinysou.swig' %}
-  {% include '_scripts/third-party/localsearch.swig' %}
-  {% include '_scripts/third-party/mathjax.swig' %}
+  {# {% include '_scripts/third-party/canvas.swig' %} #}
+  {# {% include '_scripts/third-party/comments.swig' %} #}
+  {# {% include '_scripts/third-party/tinysou.swig' %} #}
+  {# {% include '_scripts/third-party/localsearch.swig' %} #}
+  {# {% include '_scripts/third-party/mathjax.swig' %} #}
   {% include '_scripts/third-party/lean-analytics.swig' %}
-  {% include '_scripts/baidu-push.swig' %}
   {% include '_scripts/third-party/schedule.swig' %}
-
-  <script>
-  (function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-  })();
-  </script>
+  {% include '_scripts/baidu-push.swig' %}
 
 </body>
 </html>
