@@ -1,8 +1,6 @@
 {% macro render(post) %}
-
   <article class="post post-type-{{ post.type | default('normal') }}" itemscope itemtype="//schema.org/Article">
     <header class="post-header">
-
       <h1 class="post-title">
         {% if post.link %}{# Link posts #}
           <a class="post-title-link post-title-link-external" target="_blank" href="{{ url_for(post.link) }}" itemprop="url">

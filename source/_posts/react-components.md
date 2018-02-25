@@ -7,7 +7,7 @@ tags:
 ---
 
 说 React 组件间通讯之前，我们先来讨论一下 React 组件究竟有多少种层级间的关系。假设我们开发的项目是一个纯 React 的项目，那我们项目应该有如下类似的关系：
-![](http://p2oxdr4br.bkt.clouddn.com/react.png)
+![](https://cdn.liujiefront.com/images/react-component/react.png)
 <!-- more -->
 
 父子：Parent 与 Child_1、Child_2、Child_1_1、Child_1_2、Child_2_1
@@ -183,7 +183,7 @@ class Child_2_1 extends Component{
 }
 ```
 然而，这个方法有一个问题，由于 Parent 的 `state` 发生变化，会触发 Parent 及从属于 Parent 的子组件的生命周期，所以我们在控制台中可以看到，在各个组件中的 `componentDidUpdate` 方法均被触发。
-![](http://p2oxdr4br.bkt.clouddn.com/react-2.png)
+![](https://cdn.liujiefront.com/images/react-component/react-2.png)
 有没有更好的解决方式来进行兄弟组件间的通讯，甚至是父子组件层级较深的通讯的呢？
 
 ## 观察者模式
@@ -238,7 +238,7 @@ class Child_2 extends Component{
 }
 ```
 我们在 child_2 组件的 `componentDidMount` 中订阅了 msg 事件，并在 child_1 `componentDidMount` 中，在 1s 后发布了 msg 事件，child_2 组件对 msg 事件做出相应，更新了自身的 `state`，我们可以看到，由于在整个通讯过程中，只改变了 child_2 的 `state`，因而只有 child_2 和 child_2_1 出发了一次更新的生命周期。
-![](http://p2oxdr4br.bkt.clouddn.com/react-3.png)
+![](https://cdn.liujiefront.com/images/react-component/react-3.png)
 
 而上面代码中，神奇的 eventProxy.js 究竟是怎样的一回事呢？
 
@@ -391,7 +391,7 @@ class Child_2_1 extends Component{
 
 而在 child_2 与 child_2_1 组件中，通过 `store` 的 `subscribe` 方法，监听 `store` 的变化，触发 `dispatch` 后，所有通过 `subscribe` 进行监听的函数都会作出相应，根据当前通过 `store.getState()` 获取到的结果进行处理，对当前组件的 `state` 进行设置。所以我们可以在控制台上看到各个组件更新及存储在 `store` 中 `state` 的情况：
 
-![](http://p2oxdr4br.bkt.clouddn.com/react-4.png)
+![](https://cdn.liujiefront.com/images/react-component/react-4.png)
 
 在 Redux 中，`store` 的作用，与 MVC 中的 Model 类似，可以将我们项目中的数据传递给 `store`，交给 `store` 进行处理，并可以实时通过 `store.getState()` 获取到存储在 `store` 中的数据。我们对上面例子的 `reducer` 及各个组件的 `componentDidMount` 做点小修改，看看 `store` 的这一个特性。
 
@@ -462,7 +462,7 @@ class Child_2_1 extends Component{
 
 我们对创建 `store` 时所传进去的 `reducer` 进行修改。`reducer` 中，其参数 `state` 为当前 `store` 的值，我们对不同的 `action` 进行处理，并将处理后的结果存储在 `state` 中并进行返回。此时，通过 `store.getState()` 获取到的，就是我们处理完成后的 `state`。
 
-![](http://p2oxdr4br.bkt.clouddn.com/react-5.png)
+![](https://cdn.liujiefront.com/images/react-component/react-5.png)
 
 Redux 内部的实现，其实也是基于观察者模式的，`reducer` 的调用结果，存储在 `store` 内部的 `state` 中，并在每一次 `reducer` 的调用中并作为参数传入。所以在 child_1 组件第 2s 的 dispatch 后，child_2 与 child_2_1 组件通过 `subscribe` 监听的函数，其通过 `getState` 获得的值，都包含有 child_2 与 child_2_1 字段的，这就是为什么第 2s 后的响应，child_2 也进行了一次生命周期。所以在对 `subscribe` 响应后的处理，最好还是先校对通过 `getState()` 获取到的 `state` 与当前组件的 `state` 是否相同。
 
@@ -484,7 +484,7 @@ Redux 内部的实现，其实也是基于观察者模式的，`reducer` 的调�
 
 加上这样的校验，各个组件的生命周期的触发就符合我们的预期了。
 
-![](http://p2oxdr4br.bkt.clouddn.com/react-6.png)
+![](https://cdn.liujiefront.com/images/react-component/react-6.png)
 
 ## 小结
 
