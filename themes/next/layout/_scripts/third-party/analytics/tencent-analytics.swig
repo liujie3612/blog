@@ -1,5 +1,6 @@
 {% if theme.tencent_analytics %}
-  <script type="text/javascript">
+{#
+ <script type="text/javascript">
     (function() {
       var hm = document.createElement("script");
       hm.src = "//tajs.qq.com/stats?sId={{ theme.tencent_analytics }}";
@@ -7,4 +8,6 @@
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
+#}
+  <script type="text/javascript" src="http://tajs.qq.com/stats?sId=65368360" charset="UTF-8"></script>
 {% endif %}
