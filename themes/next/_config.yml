@@ -257,6 +257,8 @@ mathjax:
 # yungentie
 # yungentie_shortname: blog-liujiefront-com
 
+valine: true
+
 # Baidu Share
 # Available value:
 #    button | slide
