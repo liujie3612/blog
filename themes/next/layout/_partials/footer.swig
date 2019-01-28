@@ -85,6 +85,6 @@
 </div>
 
 {# <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=64634&auto=1&height=66"></iframe> #}
-<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 本站总访问量 <span id="busuanzi_value_site_pv"></span> &nbsp;&nbsp;&nbsp;
 您是第<span id="busuanzi_value_site_uv"></span>个来到的小伙伴
