@@ -15,16 +15,16 @@ JS属于解释型语言，在执行过程中顺序执行，但是会分块先预
     console.log(a);
     var a = 123;
     console.log(a);
-    
+
     function a(){};
     console.log(a);
-    
+
     var b = function(){};
     console.log(b);
-    
+
     function d(){};
  }
- 
+
  //调用函数
  fn(1);
 
@@ -47,7 +47,7 @@ JS属于解释型语言，在执行过程中顺序执行，但是会分块先预
 1. 创建AO对象
 ``` javascript
 AO{
-    //空对象    
+    //空对象
 }
 ```
 
@@ -62,7 +62,7 @@ AO{
 3. 将实参值和形参统一
 ``` javascript
 AO{
-    a : 1,
+    a : 123,
     b : undefined
 }
 ```
@@ -91,13 +91,13 @@ AO{
     console.log(a);// 输出functiona(){}
     var a = 123;//执行到这里重新对a赋，AO对象再一次更新
     console.log(a);// 输出123
-    
+
     function a(){};//预编译环节已经进行了变量提升，故执行时不在看这行代码
     console.log(a);// 输出123
-    
+
     var b = function(){};//这个是函数表达式不是函数声明，故不能提升，会对AO中的b重新赋值
     console.log(b);//输出function(){}
-    
+
     function d(){};
  }
 ```
