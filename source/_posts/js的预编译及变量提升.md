@@ -62,7 +62,7 @@ AO{
 3. 将实参值和形参统一
 ``` javascript
 AO{
-    a : 123,
+    a : 1,
     b : undefined
 }
 ```
