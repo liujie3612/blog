@@ -11,9 +11,9 @@ const commitType = {
   mod: '修改：'
 }
 
-const commit = commitType[paramType]
+const type = commitType[paramType]
 
 exec(
-  `hexo clean && hexo g -d && git add . && git commit -m${commit}${paramCommit} && git push origin master`,
+  `hexo clean && hexo g -d && git add . && git commit -m${type}${paramCommit} && git push origin master`,
   { stdio: [0, 1, 2] }
 )
