@@ -34,7 +34,6 @@ Promise.prototype.finally = function (callback) {
 };
 ```
 resolve接收callback函数，立即执行； 转化为promise对象都执行then方法；
-   
 
 ## Promise.all:
 1. 接收数组作为参数，都是Promise的实例，如果不是就调用resolve方法
@@ -53,12 +52,12 @@ resolve接收callback函数，立即执行； 转化为promise对象都执行the
 2. 如果抛出错误，相当于一个数组
 
 ## Promise.resolve:
-     1. 将现有对象转化为promise对象
-     2. 四种情况：
-                Promise实例：不做修改，直接返回
-                thenable对象，有then方法的对象，转为Promise后立即执行thenable里的then的方法，返回一个promise对象
-                普通对象，或者不是对象
-                没有参数
+1. 将现有对象转化为promise对象
+2. 四种情况：
+    Promise实例：不做修改，直接返回
+    thenable对象，有then方法的对象，转为Promise后立即执行thenable里的then的方法，返回一个promise对象
+    普通对象，或者不是对象
+    没有参数
 
 ## Promise.reject:
 1. 也返回一个新的promise实例，但是状态是rejected，所以then不起作用
