@@ -15,7 +15,7 @@ tags:
 
 <!--more-->
 
-```
+``` javascript
 //亲戚家
 var otherHome = {
    tips: '我家有电筒',

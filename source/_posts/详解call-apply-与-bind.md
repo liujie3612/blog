@@ -13,8 +13,8 @@ tags: javascript
 当调用一个函数时，可以赋值一个不同的 `this` 对象。`this` 引用当前对象，即 `call` 方法的第一个参数。
 通过`call`方法，你可以在一个对象上借用另一个对象上的方法，比如`Object.prototype.toString.call([])`，就是一个`Array`对象借用了`Object`对象上的方法。
 
-```
-语法 fun.call(thisArg[, arg1[, arg2[, ...]]])
+``` js
+fun.call(thisArg[, arg1[, arg2[, ...]]])
 ```
 
 ### thisArg
