@@ -101,7 +101,15 @@ Vue.js 利用 createElement 方法创建 VNode，它定义在 src/core/vdom/crea
 createElement总结：每个 VNode 有 children，children 每个元素也是一个 VNode，这样就形成了一个 VNode Tree，它很好的描述了我们的 DOM Tree。
 
 ## update
-上面的提到的`mountComponent`方法里有`vm._update(vm._render(), hydrating)`的调用。（ ** _update 方法的作用是把 VNode 渲染成真实的 DOM **）。_update 的核心就是调用 `vm.__patch__ `方法,浏览器下会指向`src/platforms/web/runtime/patch.js`里面有`createPatchFunction`，createPatchFunction方法很长，内部定义了一系列的辅助方法，最终一个关键代码是`return function patch (oldVnode, vnode, hydrating, removeOnly)`
+上面的提到的`mountComponent`方法里有`vm._update(vm._render(), hydrating)`的调用。（ ** _update 方法的作用是把 VNode 渲染成真实的 DOM **）。它的定义在 `src/core/instance/lifecycle.js` 中
+![](https://cdn.liujiefront.com/images/vue-source/975yl.png)
+
+`_update` 的核心就是调用 `vm.__patch__ `方法, 浏览器下会指向`src/platforms/web/runtime/patch.js`。里面有`createPatchFunction`方法，![](https://cdn.liujiefront.com/images/vue-source/j0c5r.png)
+`createPatchFunction`方法很长，内部定义了一系列的辅助方法，最终一个关键代码是：`return function patch (oldVnode, vnode, hydrating, removeOnly)`。这个方法就赋值给了`lifecycleMixin`里的`vm.$el`
+![](https://cdn.liujiefront.com/images/vue-source/labe5.png)
+
+下面对`createPatchFunction`和`patch`函数单独的讲解下：
+
 `createPatchFunction`方法有两个参数：
 - nodeOps：表示对 “平台 DOM” 的一些操作方法
 - modules：表示平台的一些模块，它们会在整个 patch 过程的不同阶段执行相应的钩子函数。
@@ -111,8 +119,6 @@ createElement总结：每个 VNode 有 children，children 每个元素也是一
 - vnode 表示执行 _render 后返回的 VNode 的节点；
 - hydrating 表示是否是服务端渲染
 - removeOnly 是给 transition-group 用的
-
-`return function patch`这个方法就赋值给了`vm.__patch__`,`lifecycleMixin`里有调用`vm.$el = vm.__patch__`
 
 回到`patch`函数本身,内部的实现还是很复杂的，看几个关键步骤：
 
