@@ -62,12 +62,17 @@ render: function (createElement) {
 ``` js
 vnode = render.call(vm._renderProxy, vm.$createElement)
 ```
-可以看到，render 函数中的 createElement 方法就是 vm.$createElement 方法。
 
-vm.$createElement方法定义在 `initRender` ，里面有一个`vm._c`是模板版本使用的，而`vm.$createElement`是手写 render 方法
+`vm.$createElement` 的赋值是在 `initRender` 
+
+- `vm._c`是模板版本使用的，
+- `vm.$createElement`是手写 render 方法
+
+总结：render 函数中的 `vm.$createElement` 方法其实就是 `createElement` 方法。
+
 ![](https://cdn.liujiefront.com/images/vue-source/gimx5.png)
 
-vm._render 最终是通过执行 createElement 方法并返回的是 vnode(Virtual DOM)
+** vm._render 最终是通过执行 createElement 方法并返回的是 vnode(Virtual DOM) **
 
 ### Virtual DOM
 
@@ -101,12 +106,22 @@ Vue.js 利用 createElement 方法创建 VNode，它定义在 src/core/vdom/crea
 createElement总结：每个 VNode 有 children，children 每个元素也是一个 VNode，这样就形成了一个 VNode Tree，它很好的描述了我们的 DOM Tree。
 
 ## update
-上面的提到的`mountComponent`方法里有`vm._update(vm._render(), hydrating)`的调用。（ ** _update 方法的作用是把 VNode 渲染成真实的 DOM **）。它的定义在 `src/core/instance/lifecycle.js` 中
+上面的提到的`mountComponent`方法里有`vm._update(vm._render(), hydrating)`的调用。（ ** _update 方法的作用是把 VNode 渲染成真实的 DOM ** 对比于 ** _render的作用是把真实的DOM转化为VNode **）。它的定义在 `src/core/instance/lifecycle.js` 中
 ![](https://cdn.liujiefront.com/images/vue-source/975yl.png)
 
 `_update` 的核心就是调用 `vm.__patch__ `方法, 浏览器下会指向`src/platforms/web/runtime/patch.js`。里面有`createPatchFunction`方法，![](https://cdn.liujiefront.com/images/vue-source/j0c5r.png)
 `createPatchFunction`方法很长，内部定义了一系列的辅助方法，最终一个关键代码是：`return function patch (oldVnode, vnode, hydrating, removeOnly)`。这个方法就赋值给了`lifecycleMixin`里的`vm.$el`
-![](https://cdn.liujiefront.com/images/vue-source/labe5.png)
+
+``` js
+    if (!prevVnode) {
+      // initial render
+      // 映射到vdom里的return function patch里
+      vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
+    } else {
+      // updates
+      vm.$el = vm.__patch__(prevVnode, vnode)
+    }
+```
 
 下面对`createPatchFunction`和`patch`函数单独的讲解下：
 
@@ -120,7 +135,7 @@ createElement总结：每个 VNode 有 children，children 每个元素也是一
 - hydrating 表示是否是服务端渲染
 - removeOnly 是给 transition-group 用的
 
-回到`patch`函数本身,内部的实现还是很复杂的，看几个关键步骤：
+`patch`函数本身,内部的实现还是很复杂的，看几个关键步骤：
 
 1. 通过 emptyNodeAt 方法把 oldVnode 转换成 VNode 对象
 ![](https://cdn.liujiefront.com/images/vue-source/3n26o.png)
