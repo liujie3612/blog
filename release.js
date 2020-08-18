@@ -14,6 +14,5 @@ const commitType = {
 const type = commitType[paramType]
 
 exec(
-  `hexo clean && hexo g -d && git add . && git commit -m${type}${paramCommit} && git push origin master`,
-  { stdio: [0, 1, 2] }
+  `hexo clean && hexo g -d && git add . && git commit -m${type}${paramCommit} && git push origin master`, { stdio: [0, 1, 2] }
 )
