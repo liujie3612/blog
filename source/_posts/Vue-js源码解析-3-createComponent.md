@@ -24,7 +24,7 @@ var app = new Vue({
   render: h => h(App)
 })
 ```
-这里的 h 是 `createElement` 方法，上一节的学习中我们了解到它最终会调用 `_createElement` 方法，其中有一段逻辑是对参数 tag 的判断，如果是一个普通的 html 标签，则会实例化一个普通 VNode 节点，否则通过 createComponent 方法创建一个组件 VNode。
+这里的 h 是 `createElement` 方法，上一节的学习中我们了解到它最终会调用 `_createElement` 方法，其中有一段逻辑是对参数 tag 的判断，如果是一个普通的 html 标签，则会实例化一个普通 VNode 节点，否则通过 `createComponent` 方法创建一个组件 VNode。
 ``` js
 if (typeof tag === 'string') {
 
@@ -33,8 +33,7 @@ if (typeof tag === 'string') {
   vnode = createComponent(tag, data, context, children)
 }
 ```
-
-看下createComponent的实现，它定义在 `src/core/vdom/create-component.js` 文件中：
+看下`createComponent`的实现，它定义在 `src/core/vdom/create-component.js` 文件中：
 ```js
 export function createComponent (
   Ctor: Class<Component> | Function | Object | void,
@@ -130,9 +129,10 @@ Vue.extend = function (extendOptions: Object): Function {
   }
 
   const Sub = function VueComponent (options) {
-     // 执行 this._init 逻辑再次走到了 Vue 实例的初始化逻辑，实例化子组件的逻辑在之后的章节会介绍。
+     // 当我们去实例化 Sub 的时候，就会执行 this._init 逻辑,再次走到了 Vue 实例的初始化逻辑
     this._init(options)
   }
+  
   // 原型继承
   Sub.prototype = Object.create(Super.prototype)
   Sub.prototype.constructor = Sub
@@ -235,4 +235,4 @@ return vnode
 
 ## 总结：
 
-这一节我们分析了 createComponent 的实现，了解到它在渲染一个组件的时候的 3 个关键逻辑：构造子类构造函数，安装组件钩子函数和实例化 vnode。createComponent 后返回的是组件 vnode，它也一样走到 vm._update 方法，进而执行了 patch 函数，我们在上一章对 patch 函数做了简单的分析，那么下一节我们会对它做进一步的分析。
+这一节我们分析了 createComponent 的实现，了解到它在渲染一个组件的时候的 3 个关键逻辑：`构造子类构造函数`，`安装组件钩子函数`和`实例化 vnode`。createComponent 后返回的是组件 vnode，它也一样走到 vm._update 方法，进而执行了 patch 函数，我们在上一章对 patch 函数做了简单的分析，那么下一节我们会对它做进一步的分析。

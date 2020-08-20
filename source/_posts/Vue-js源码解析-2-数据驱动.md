@@ -74,7 +74,7 @@ vnode = render.call(vm._renderProxy, vm.$createElement)
 
 总结：render 函数中的 `vm.$createElement` 方法其实就是 `createElement` 方法。
 
-** vm._render 最终是通过执行 createElement 方法并返回的是 vnode(Virtual DOM) **
+**vm._render 最终是通过执行 createElement 方法并返回的是 vnode(Virtual DOM)**
 
 ### Virtual DOM
 
@@ -89,7 +89,7 @@ Virtual DOM 除了它的数据结构的定义，映射到真实的 DOM 实际上
 
 ### createElement
 
-Vue.js 利用 `createElement` 方法创建 VNode，它定义在 src/core/vdom/create-elemenet.js 中。createElement 方法实际上是对 _createElement 方法的封装。
+Vue.js 利用 `createElement` 方法创建 VNode，它定义在 src/core/vdom/create-elemenet.js 中。createElement 方法实际上是对 `_createElement` 方法的封装。
 
 _createElement方法有 5 个参数
 - context：表示 VNode 的上下文环境,它是 Component 类型
@@ -97,6 +97,67 @@ _createElement方法有 5 个参数
 - data：表示 VNode 的数据，它是一个 VNodeData 类型
 - children：表示当前 VNode 的子节点，它是任意类型的，下面会单独说到它
 - normalizationType：表示子节点规范的类型，主要还是render 函数是编译生成的还是用户手写的
+
+```js
+export function _createElement (
+  context: Component,
+  tag?: string | Class<Component> | Function | Object,
+  data?: VNodeData,
+  children?: any,
+  normalizationType?: number
+): VNode | Array<VNode> {
+ // 一些边缘情况，暂时不需要关注：  
+ // 1. 传入的 data 参数不能是被观察的 data  
+ // 2. 动态组件处理  
+ // 3. key值如果不是原始类型则抛出警告  
+ // 4. support single function children as default scoped slot
+
+  // 核心逻辑1：规范化chidlren
+  if (normalizationType === ALWAYS_NORMALIZE) {
+    children = normalizeChildren(children)
+  } else if (normalizationType === SIMPLE_NORMALIZE) {
+    children = simpleNormalizeChildren(children)
+  }
+   // 核心逻辑2：创建vnode
+  let vnode, ns
+  if (typeof tag === 'string') {
+    let Ctor
+    ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
+    // 是否HTML原生保留标签
+    if (config.isReservedTag(tag)) {
+      // platform built-in elements
+      vnode = new VNode(
+        config.parsePlatformTagName(tag), data, children,
+        undefined, undefined, context
+      )
+    // 是否是已注册的组件名
+    } else if (isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
+      vnode = createComponent(Ctor, data, context, children, tag)
+    } else {
+      // 未知或未列出的命名空间元素
+      // 等在运行时检查，因为在其父级标准化子级时可能会为其分配一个名称空间
+      vnode = new VNode(
+        tag, data, children,
+        undefined, undefined, context
+      )
+    }
+  } else {
+    // direct component options / constructor
+    vnode = createComponent(tag, data, context, children)
+  }
+
+  // 返回vnode
+  if (Array.isArray(vnode)) {
+    return vnode
+  } else if (isDef(vnode)) {
+    if (isDef(ns)) applyNS(vnode, ns)
+    if (isDef(data)) registerDeepBindings(data)
+    return vnode
+  } else {
+    return createEmptyVNode()
+  }
+}
+```
 
 #### children的规范
 根据`normalizationType`，分别调用`normalizeChildren`和`simpleNormalizeChildren`
@@ -135,17 +196,34 @@ createElement总结：
 
 `_update` 的核心就是调用 `vm.__patch__ `方法, 浏览器下会指向`src/platforms/web/runtime/patch.js`。里面有`createPatchFunction`方法
 ![](https://cdn.liujiefront.com/images/vue-source/j0c5r.png)
-`createPatchFunction`方法很长，内部定义了一系列的辅助方法，最终一个关键代码是：`return function patch (oldVnode, vnode, hydrating, removeOnly)`。这个方法就赋值给了`lifecycleMixin`里的`vm.$el`
 
-``` js
-    if (!prevVnode) {
-      // initial render
-      // 映射到vdom里的return function patch里
-      vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
-    } else {
-      // updates
-      vm.$el = vm.__patch__(prevVnode, vnode)
+`createPatchFunction`方法很长，内部定义了一系列的辅助方法；
+最终一个关键代码是：`return function patch (oldVnode, vnode, hydrating, removeOnly)`。
+这个方法就赋值给了`lifecycleMixin`里的`vm.$el`
+```js
+const hooks = ['create', 'activate', 'update', 'remove', 'destroy']
+export function createPatchFunction (backend) {
+  let i, j
+  const cbs = {}
+
+  const { modules, nodeOps } = backend
+  // 遍历，将 hooks 作为 cbs 属性，然后将对应的 modules 的子项 push 到 cbs.hooks 中。
+  for (i = 0; i < hooks.length; ++i) {
+    cbs[hooks[i]] = []
+    for (j = 0; j < modules.length; ++j) {
+      if (isDef(modules[j][hooks[i]])) {
+        cbs[hooks[i]].push(modules[j][hooks[i]])
+      }
     }
+  }
+
+  // ...这里定义了很多辅助函数
+
+  // 返回真正的patch
+  return function patch (oldVnode, vnode, hydrating, removeOnly) {
+
+  }
+}
 ```
 
 下面对`createPatchFunction`和`patch`函数单独的讲解下：
@@ -154,33 +232,79 @@ createElement总结：
 - nodeOps：表示对 “平台 DOM” 的一些操作方法
 - modules：表示平台的一些模块，它们会在整个 patch 过程的不同阶段执行相应的钩子函数。
 
+```js
+<body>
+    <div id="app"></div>
+</body>
+var app = new Vue({
+    el: '#app',
+    render: function(createElement) {
+        return createElement('div', {
+            attrs: { id: 'app' }
+        }, 'Hello Vue!')
+    }
+})
+```
+
 `patch`方法有四个参数：
-- oldVnode 表示旧的 VNode 节点，它也可以不存在或者是一个 DOM 对象；
-- vnode 表示执行 _render 后返回的 VNode 的节点；
+- oldVnode：例子中 id 为 app 的 DOM 对象，也就是在 HTML 模板中写的 <div id="app">，vm.$el 的赋值是在之前 mountComponent 函数做的。
+- vnode：表示执行 _render 后返回的 VNode 的节点；
 - hydrating 表示是否是服务端渲染
 - removeOnly 是给 transition-group 用的
 
 `patch`函数本身,内部的实现还是很复杂的，看几个关键步骤：
+``` js
+const isRealElement = isDef(oldVnode.nodeType)
+if (!isRealElement && sameVnode(oldVnode, vnode)) {
+  // ...
+
+} else {
+  if (isRealElement) {
+    // ...     
+
+    // 将真实的 DOM 转换成 vnode，也就是 <div id="app"></div>
+    oldVnode = emptyNodeAt(oldVnode)
+  }
+  // 保存真实的DOM
+  const oldElm = oldVnode.elm
+  // body
+  const parentElm = nodeOps.parentNode(oldElm)
+
+  // insertedVnodeQueue 在这是空数组
+  // oldEm._leaveCb 在这是 undefined
+  // nextSibling表示DOM的右边的节点，在这是换行text节点
+  createElm(
+    vnode,
+    insertedVnodeQueue,
+    oldElm._leaveCb ? null : parentElm,
+    nodeOps.nextSibling(oldElm)
+  )
+
+  // 销毁旧节点        
+  if (isDef(parentElm)) {          
+    removeVnodes([oldVnode], 0, 0)        
+  } else if (isDef(oldVnode.tag)) {
+    invokeDestroyHook(oldVnode)        
+  }
+}
+```
 
 1. oldVnode 是真实的 DOM，通过 emptyNodeAt 将真实的 DOM 转换成 vnode
-![](https://cdn.liujiefront.com/images/vue-source/3n26o.png)
-
 ```js
   oldVnode = emptyNodeAt(oldVnode)
 ```
-
-1. parentElm: 比如 body 节点（`<body><div id="app"></div></body>`）
-
-3. 调用 createElm 方法：作用是通过虚拟节点创建真实的 DOM 并插入到它的父节点中
+2. parentElm: 比如 body 节点（`<body><div id="app"></div></body>`）
+   
+3. 调用 createElm 方法：作用是通过虚拟节点创建真实的 DOM 并插入到它的父节点中:
+   
   - createComponent 尝试创建子组件
-  - createChildren 创建子元素，实际上是遍历子虚拟节点，递归调用 createElm，这是一种常用的深度优先的遍历算法
+  - createChildren 创建子元素，实际上是遍历子虚拟节点，递归调用 createElm，这是一种常用的**深度优先**的遍历算法
   - invokeCreateHooks 执行所有的 create 的钩子并把 vnode push 到 insertedVnodeQueue 中
   - insert 把 DOM 插入到父节点中，因为是递归调用，子元素会优先调用 insert，所以整个 vnode 树节点的插入顺序是**先子后父**
 
-4. vnode.parent ，父占位节点。和组件相关
-
+4. vnode.parent: 父占位节点。和组件相关
+   
 5. 判断之前定义的 parentElm 是否存在，有则删除掉 vm.$el 对应的节点。在执行这一步前，浏览器的 DOM 结构是这样的：
-
 ```js
 <body>
     <div id="app"></div>
@@ -190,7 +314,6 @@ createElement总结：
 之后删除 `<div id="app"></div>` 完成新旧节点替换工作。
 
 6. 最后将 vnode.elm（也就是真实DOM）返回。
-最后
 
 ## 总结
 从初始化 Vue 到最终渲染的整个过程大概能分为这样的步骤：
