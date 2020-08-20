@@ -160,7 +160,7 @@ Vue.extend 的作用就是：
 
 ### 安装组件钩子函数
 
-`installComponentHooks(data)`安装的作用就是在 VNode 执行 ![pach]() 的过程中执行相关的钩子函数：
+`installComponentHooks(data)`安装的作用就是在 VNode 执行 [patch](https://blog.liujiefront.com/2020/08/18/Vue-js%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-4-patch/) 的过程中执行相关的钩子函数：
 
 ```js
 function installComponentHooks (data: VNodeData) {
