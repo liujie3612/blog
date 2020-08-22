@@ -1,5 +1,5 @@
 ---
-title: Vue.js源码解析(4) - 生命周期
+title: Vue.js源码解析(6) - 生命周期
 date: 2020-08-20 22:24:29
 tags:
   - vue
