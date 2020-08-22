@@ -6,7 +6,8 @@
     "version": "3.9.0"
   },
   "scripts": {
-    "upload": "node ./release.js"
+    "upload": "node ./release.js",
+    "start": "hexo server"
   },
   "dependencies": {
     "hexo": "^3.7.1",

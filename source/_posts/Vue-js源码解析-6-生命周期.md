@@ -119,7 +119,7 @@ beforeMount 钩子函数发生在 mount，也就是 DOM 挂载之前，它的调
 function mountComponent(vm, el, hydrating) {
   vm.$el = el;
   // ...
-  <span color="red">callHook(vm, "beforeMount")</span>;
+  callHook(vm, "beforeMount")
 
   var updateComponent;
   /* istanbul ignore if */
@@ -150,14 +150,14 @@ function mountComponent(vm, el, hydrating) {
   // 子组件的 mounted 钩子在 占位符vnode的insert 钩子中调用
   if (vm.$vnode == null) {
     vm._isMounted = true;
-    <span color="red">callHook(vm, "mounted")<span>
+    callHook(vm, "mounted")
   }
   return vm;
 }
 ```
 
-- 在执行 vm.\_render() 函数渲染 VNode 之前，执行了 beforeMount 钩子函数
-- 在执行完 vm.\_update() 把 VNode patch 到真实 DOM 后，执行 mounted 钩子。
+- 在执行 `vm._render()` 函数渲染 VNode 之前，执行了 `beforeMount` 钩子函数
+- 在执行完 `vm._update()` 把 VNode patch 到真实 DOM 后，执行 `mounted` 钩子。
 
 注意，这里对 mounted 钩子函数执行有一个判断逻辑，`vm.$vnode` 如果为 null，则表明这不是一次组件的初始化过程，而是我们通过外部 `new Vue` 初始化过程。那么对于组件，它的 mounted 时机在哪儿呢？
 

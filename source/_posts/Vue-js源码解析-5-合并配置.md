@@ -14,7 +14,7 @@ new Vue 的过程通常有 2 种场景：
 
 <!-- more -->
 
-无论哪种场景，都会执行实例的 `_init(options)` 方法，它首先会执行一个 `merge options` 的逻辑，相关的代码在 src/core/instance/init.js 中：
+无论哪种场景，都会执行实例的 `_init(options)` 方法，它首先会执行一个 `merge options` 的逻辑，相关的代码在 `src/core/instance/init.js` 中：
 
 ```js
 Vue.prototype._init = function (options?: Object) {
@@ -35,7 +35,7 @@ Vue.prototype._init = function (options?: Object) {
 };
 ```
 
-可以看到不同场景对于 options 的合并逻辑是不一样的，并且传入的 options 值也有非常大的不同，接下来我会分开介绍 2 种场景的 options 合并过程。
+可以看到不同场景对于 `options` 的合并逻辑是不一样的，并且传入的 `options` 值也有非常大的不同，接下来我会分开介绍 2 种场景的 `options` 合并过程。
 
 为了更直观，我们可以举个简单的示例：
 
@@ -84,7 +84,7 @@ export function initMixin (Vue: GlobalAPI) {
 
 # 外部调用场景：
 
-当执行 new Vue 的时候，在执行 `this._init(options)` 的时候，就会执行如下逻辑去合并 options：
+当执行 new Vue 的时候，在执行 `this._init(options)` 的时候，就会执行如下逻辑去合并 `options`：
 
 ```js
 vm.$options = mergeOptions(
@@ -104,7 +104,7 @@ export function resolveConstructorOptions (Ctor: Class<Component>) {  
   return options
 }
 ```
-if 语句通过 `Ctor.super` 判断 Ctor 是 Vue 还是 Vue 的子类，显然在我们的例子中是 Vue，所以 resolveConstructorOptions 函数直接返回 Vue.options，那么这个值又是什么呢，其实在 `initGlobalAPI(Vue)` 的时候定义了这个值，代码在 `src/core/global-api/index.js` 中：
+if 语句通过 `Ctor.super` 判断 `Ctor` 是 Vue 还是 Vue 的子类，显然在我们的例子中是 Vue，所以 `resolveConstructorOptions` 函数直接返回 `Vue.options`，那么这个值又是什么呢，其实在 `initGlobalAPI(Vue)` 的时候定义了这个值，代码在 `src/core/global-api/index.js` 中：
 
 ```js
 export function initGlobalAPI(Vue: GlobalAPI) {
@@ -120,8 +120,8 @@ export function initGlobalAPI(Vue: GlobalAPI) {
   // ...
 }
 ```
-* 接着执行了 Vue.options._base = Vue，它用于[创建子类构造函数](https://blog.liujiefront.com/2020/08/18/Vue-js%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-3-createComponent/)
-* 最后通过 extend(Vue.options.components, builtInComponents) 把一些内置组件扩展到 Vue.options.components 上，Vue 的内置组件目前有 <keep-alive>、<transition> 和 <transition-group> 组件，这也就是为什么我们在其它组件中使用 <keep-alive> 组件不需要注册的原因，这块儿后续我们介绍 <keep-alive> 组件的时候会详细讲。
+* 接着执行了 `Vue.options._base = Vue`，它用于[创建子类构造函数](https://blog.liujiefront.com/2020/08/18/Vue-js%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-3-createComponent/)
+* 最后通过 `extend(Vue.options.components, builtInComponents)` 把一些内置组件扩展到 `Vue.options.components` 上，Vue 的内置组件目前有 <keep-alive>、<transition> 和 <transition-group> 组件，这也就是为什么我们在其它组件中使用 <keep-alive> 组件不需要注册的原因，这块儿后续我们介绍 <keep-alive> 组件的时候会详细讲。
 此时的 Vue.options 大概长这样：
 
 ![](https://cdn.liujiefront.com/images/algorithm/xax4l.png)
