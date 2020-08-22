@@ -119,7 +119,7 @@ beforeMount 钩子函数发生在 mount，也就是 DOM 挂载之前，它的调
 function mountComponent(vm, el, hydrating) {
   vm.$el = el;
   // ...
-  <span color="red">callHook(vm, "beforeMount");</span>;
+  <span color="red">callHook(vm, "beforeMount")</span>;
 
   var updateComponent;
   /* istanbul ignore if */
@@ -150,7 +150,7 @@ function mountComponent(vm, el, hydrating) {
   // 子组件的 mounted 钩子在 占位符vnode的insert 钩子中调用
   if (vm.$vnode == null) {
     vm._isMounted = true;
-    <span color="red">callHook(vm, "mounted");<span>
+    <span color="red">callHook(vm, "mounted")<span>
   }
   return vm;
 }
