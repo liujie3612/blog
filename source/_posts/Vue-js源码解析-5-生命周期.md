@@ -8,9 +8,11 @@ tags:
 ---
 
 每个 Vue 实例在被创建之前都要经过一系列的初始化过程。例如需要设置数据监听、编译模板、挂载实例到 DOM、在数据变化时更新 DOM 等。同时在这个过程中也会运行一些叫做**生命周期**钩子的函数，给予用户机会在一些特定的场景下添加他们自己的代码。
-![](https://cdn.liujiefront.com/images/vue-source/lifecycle.png)
 
 <!-- more -->
+
+先上一张大图：
+![](https://cdn.liujiefront.com/images/vue-source/lifecycle.png)
 
 # callHook
 
@@ -412,9 +414,9 @@ Vue.prototype.$destroy = function () {
 };
 ```
 
-- beforeDestroy 钩子函数的执行时机是在 \$destroy 函数执行最开始的地方
+- beforeDestroy 钩子函数的执行时机是在 `$destroy` 函数执行最开始的地方
 - 接着执行了一系列的销毁动作
-  - 包括从 parent 的 \$children 中删掉自身
+  - 包括从 parent 的 `$children` 中删掉自身
   - 删除 watcher
   - 当前的 VNode 执行销毁钩子函数等
 - 执行 vm.\_\_patch\_\_(vm.\_vnode, null) 触发它子组件的销毁钩子函数，这样一层层的递归调用
