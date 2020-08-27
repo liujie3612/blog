@@ -97,7 +97,7 @@ if (isObject(Ctor)) {
   Ctor = baseCtor.extend(Ctor)
 }
 ```
-这里的baseCtor实际上是Vue，这个的定义是在最开始初始化 Vue 的阶段，在 `initGlobalAPI` 函数有这么一段逻辑：`Vue.options._base = Vue`。这里虽然定义的是`Vue.options`但是createComponent 取的是 `context.$options`，实际在 src/core/instance/init.js 里 Vue 原型上的 _init 函数中有这么一段逻辑：
+这里的baseCtor实际上是Vue，这个的定义是在最开始初始化 Vue 的阶段，在 `initGlobalAPI` 函数有这么一段逻辑：`Vue.options._base = Vue`。这里虽然定义的是`Vue.options`但是createComponent 取的是 `context.$options`，实际在 `src/core/instance/init.js` 里 Vue 原型上的 _init 函数中有这么一段逻辑：
 ```js
 vm.$options = mergeOptions(
   resolveConstructorOptions(vm.constructor),
@@ -105,7 +105,8 @@ vm.$options = mergeOptions(
   vm
 )
 ```
-这样就把 Vue 上的一些 option 扩展到了 `vm.$options` 上。所以我们也就能通过 `vm.$options._base` 拿到 Vue 这个构造函数了。[mergeOptions](https://blog.liujiefront.com/2020/08/19/Vue-js%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-5-%E5%90%88%E5%B9%B6%E9%85%8D%E7%BD%AE/)的功能是**把 Vue 构造函数的 options 和用户传入的 options 做一层合并，到 vm.$options 上**。
+这样就把 Vue 上的一些 option 扩展到了 `vm.$options` 上。所以我们也就能通过 `vm.$options._base` 拿到 `Vue` 这个构造函数了。
+[mergeOptions](https://blog.liujiefront.com/2020/08/19/Vue-js%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-5-%E5%90%88%E5%B9%B6%E9%85%8D%E7%BD%AE/)的功能是**把 Vue 构造函数的 options 和用户传入的 options 做一层合并，到 vm.$options 上**。
 
 另外，我们的组件通常都是一个普通的对象，比如通过 `vue-loader` 对我们的单文件组件处理以后返回的就是一个`普通的对象`
 ![](https://cdn.liujiefront.com/images/vue-source/7ushl.png)
@@ -150,13 +151,13 @@ Vue.extend = function (extendOptions: Object): Function {
   return Sub
 }
 ```
-Vue.extend 的作用就是：
-1. 定义子类构造函数 Sub，基于原型链继承于 Vue（把一个**纯对象**转换一个**继承于 Vue 的构造器 Sub** 并返回（对象转函数））
+`Vue.extend` 的作用就是：
+1. 定义子类构造函数 `Sub`，基于原型链继承于 Vue（把一个**纯对象**转换一个**继承于 Vue 的构造器 Sub** 并返回（对象转函数））
 2. 对 Sub 这个对象本身扩展了一些属性，如：
    - 扩展 options，添加全局 API
    - 对配置中的 props 和 computed 做了初始化工作。
    - initProps
-3. 缓存构造函数，避免多次执行 Vue.extend 的时候对同一个子组件重复构造。
+3. 缓存构造函数，避免多次执行 `Vue.extend` 的时候对同一个子组件重复构造。
 
 ### 安装组件钩子函数
 

@@ -89,7 +89,10 @@ Virtual DOM 除了它的数据结构的定义，映射到真实的 DOM 实际上
 
 ### createElement
 
-Vue.js 利用 `createElement` 方法创建 VNode，它定义在 src/core/vdom/create-elemenet.js 中。createElement 方法实际上是对 `_createElement` 方法的封装。
+Vue.js 利用 `createElement` 方法创建 VNode，它定义在 `src/core/vdom/create-elemenet.js` 中。createElement 方法实际上是对 `_createElement` 方法的封装,做了两件事：
+
+* 如果第三个参数是一个 数组 或者 原始类型（不包括null和undefined），那么就参数重载。
+* 判断 `alwaysNormalize` 是否为 true然后将 `normalizationType = ALWAYS_NORMALIZE`
 
 _createElement方法有 5 个参数
 - context：表示 VNode 的上下文环境,它是 Component 类型
@@ -118,6 +121,7 @@ export function _createElement (
   } else if (normalizationType === SIMPLE_NORMALIZE) {
     children = simpleNormalizeChildren(children)
   }
+  
    // 核心逻辑2：创建vnode
   let vnode, ns
   if (typeof tag === 'string') {

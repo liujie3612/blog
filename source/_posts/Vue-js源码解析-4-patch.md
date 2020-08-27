@@ -7,7 +7,7 @@ tags:
   - 源码
 ---
 
-之前的章节分析我们已经知道，当我们通过 createComponent 创建了组件 VNode，接下来会走到 vm.\_update，执行 `vm.__patch__` 去把 VNode 转换成真正的 DOM 节点。
+之前的章节分析我们已经知道，当我们通过 createComponent 创建了组件 VNode，接下来会走到 vm._update，执行 `vm.__patch__` 去把 VNode 转换成真正的 DOM 节点。
 
 patch 的流程比较复杂，先画一个图加深下印象：
 
@@ -21,17 +21,17 @@ patch 的流程比较复杂，先画一个图加深下印象：
 
 ### 组件的两个 vnode
 
-1. 占位符 vnode：vm.\$vnode 只有组件实例才有。在 `_render` 过程中赋值
+1. 占位符 vnode：vm.$vnode 只有组件实例才有。在 `_render` 过程中赋值
    ![](https://cdn.liujiefront.com/images/algorithm/fi64p.png)
-2. 渲染 vnode：vm.\_vnode 可以直接映射成真实 DOM。在 `_update` 过程中赋值
+2. 渲染 vnode：vm._vnode 可以直接映射成真实 DOM。在 `_update` 过程中赋值
    ![](https://cdn.liujiefront.com/images/algorithm/6za0m.png)
 
 它们是父子关系：`vm._vnode.parent = vm.$vnode`
 
 比如对于本文的例子来说：
 
-- 当根 Vue 实例的 render 函数执行完毕，会生成根实例的 \_vnode
-- 由于 createElement 直接返回了 App 组件，所以根实例\_vnode 同样也是 App 组件的\$vnode。
+- 当根 Vue 实例的 render 函数执行完毕，会生成根实例的 _vnode
+- 由于 createElement 直接返回了 App 组件，所以根实例_vnode 同样也是 App 组件的$vnode。
   `$vm0._vnode === $vm1.$vnode`
 - 对于 App 组件来说，他的占位符 vnode 和渲染 vnode 实际上是一种父子关系
   ![](https://cdn.liujiefront.com/images/algorithm/3pzu6.png)
@@ -62,7 +62,7 @@ export function lifecycleMixin(Vue: Class<Component>) {
 }
 ```
 
-在 vm.\_update 的过程中，把当前的 vm 赋值给 activeInstance，同时用 prevActiveInstance 保留上一次的 activeInstance。prevActiveInstance 和当前的 vm 是一个父子关系。当一个 vm 实例完成它的所有子树的 patch 或者 update 过程后，**activeInstance 会回到它的父实例**这样就完美地保证了整个深度遍历过程中，我们在实例化子组件的时候能传入当前子组件的父 Vue 实例。
+在 vm._update 的过程中，把当前的 vm 赋值给 activeInstance，同时用 prevActiveInstance 保留上一次的 activeInstance。prevActiveInstance 和当前的 vm 是一个父子关系。当一个 vm 实例完成它的所有子树的 patch 或者 update 过程后，**activeInstance 会回到它的父实例**这样就完美地保证了整个深度遍历过程中，我们在实例化子组件的时候能传入当前子组件的父 Vue 实例。
 
 ## patch
 
@@ -112,9 +112,9 @@ function createComponent(vnode, insertedVnodeQueue, parentElm, refElm) {
 1. if 语句的意思是判断 vnode.data.hook.init 是否存在，这里 vnode 是一个组件 VNode，那么条件满足，并且得到 i 就是 init 钩子函数。主要作用是：
 
 - 实例化 App 子组件
-- 执行子组件挂载 child.\$mount
+- 执行子组件挂载 child.$mount
 
-2. initComponent 主要是执行了 vnode.elm = vnode.componentInstance.\$el
+2. initComponent 主要是执行了 vnode.elm = vnode.componentInstance.$el
 3. insert 是将其组件插入到 body 中
 
 ### 执行 init 钩子
@@ -152,7 +152,7 @@ const componentVNodeHooks = {
   - vnode 表示当前 App 组件的占位符 VNode
   - activeInstance 表示根 Vue 实例
 - 返回的子组件实例保存到 App 组件的占位符 vnode 的 componentInstance 属性中。
-- 通过 \$mount 挂载子组件
+- 通过 $mount 挂载子组件
 
 #### 创建子组件实例
 
@@ -177,8 +177,8 @@ export function createComponentInstanceForVnode(
 
 1. 创建 options 对象：
 
-   - \_isComponent 为 true 表示它是一个组件
-   - \_parentVnode 表示当前组件的 vnode，也就是占位符 vnode,`_render`过程中赋值
+   - _isComponent 为 true 表示它是一个组件
+   - _parentVnode 表示当前组件的 vnode，也就是占位符 vnode,`_render`过程中赋值
    - parent 表示当前激活的组件实例，也就是 根 Vue 实例
 
 2. 实例化 App 子组件：
@@ -216,10 +216,10 @@ Vue.prototype._init = function (options?: Object) {
 };
 ```
 
-- 首先是合并 options 的过程有变化，\_isComponent 为 true，所以走到了 `initInternalComponent` 过程。
-- 执行 `initLifecycle`，建立父子实例之间的关系
-- 组件初始化的时候是不传 el 的，因此组件是自己接管了 \$mount 的过程，相当于执行
-  `child.$mount(undefined, false)`，它最终会调用 `mountComponent` 方法，进而执行 `vm._render()` 方法
+- 首先是合并 options 的过程有变化，`_isComponent` 为 true，所以走到了 `initInternalComponent` 过程。
+- 执行 `initLifecycle`，**建立父子实例之间的关系**
+- 组件初始化的时候是不传 el 的，因此**组件是自己接管了 $mount 的过程**，相当于执行
+`child.$mount(undefined, false)`，它最终会调用 `mountComponent` 方法，进而执行 `vm._render()` 方法
 
 ##### initInternalComponent
 
@@ -236,7 +236,7 @@ export function initInternalComponent(
 }
 ```
 
-它们是把之前我们通过 createComponentInstanceForVnode 函数传入的几个参数合并到内部的选项 \$options 里了。
+它们是把之前我们通过 `createComponentInstanceForVnode` 函数传入的几个参数合并到内部的选项 $options 里了。
 
 ##### initLifecycle
 
@@ -259,21 +259,21 @@ export function initLifecycle(vm: Component) {
 }
 ```
 
-可以看到 vm.$parent 就是用来保留当前 vm 的父实例，并且通过 parent.$children.push(vm) 来把当前的 vm 存储到父实例的 \$children 中。
+可以看到 vm.$parent 就是用来保留当前 vm 的父实例，并且通过 parent.$children.push(vm) 来把当前的 vm 存储到父实例的 $children 中。
 
 #### 挂载子组件
 
-由于组件初始化的时候是不传 el 的，因此组件是自己接管了 \$mount 的过程。
-回到组件 init 的过程，componentVNodeHooks 的 init 钩子函数，在完成实例化的 \_init 后，接着会执行
+由于组件初始化的时候是不传 el 的，因此组件是自己接管了 $mount 的过程。
+回到组件 init 的过程，`componentVNodeHooks` 的 init 钩子函数，在完成实例化的 _init 后，接着会执行
 `child.$mount(hydrating ? vnode.elm : undefined, hydrating)`
-所以这里 $mount 相当于执行 child.$mount(undefined, false)，它最终会调用 mountComponent 方法，进而执行 vm.\_render() 方法：
+所以这里 $mount 相当于执行 child.$mount(undefined, false)，它最终会调用 mountComponent 方法，进而执行 vm._render() 方法：
 
 ```js
 Vue.prototype._render = function (): VNode {
   const vm: Component = this;
   const { render, _parentVnode } = vm.$options;
 
-  // 保存占位符vnode / 外壳节点
+  // 保存占位符vnode  外壳节点
   vm.$vnode = _parentVnode;
 
   let vnode;
@@ -289,11 +289,11 @@ Vue.prototype._render = function (): VNode {
 };
 ```
 
-- 保存占位符 vnode 到 App 组件实例的 vm.\$vnode 中
-- 调用 render 函数生成渲染 vnode
-- 保存占位符 vnode 和渲染 vnode 的父子关系。vm.\_vnode.parent = vm.\$vnode
+- 保存占位符 vnode 到 App 组件实例的 `vm.$vnode` 中
+- 调用 render 函数生成`渲染vnode`
+- 保存`占位符vnode` 和 `渲染vnode` 的父子关系。vm._vnode.parent = vm.$vnode
 
-执行完 vm.\_render 生成 VNode 后，接下来就要执行 vm.\_update 去渲染 VNode 了,vm.\_update 的定义在 `src/core/instance/lifecycle.js` 中：
+执行完 `vm._render` 生成 VNode 后，接下来就要执行 `vm._update` 去渲染 VNode 了,vm._update 的定义在 `src/core/instance/lifecycle.js` 中：
 
 ```js
 export function lifecycleMixin(Vue: Class<Component>) {
@@ -323,14 +323,14 @@ export function lifecycleMixin(Vue: Class<Component>) {
 }
 ```
 
-- 保存通过 render 生成的渲染 vnode
+- 保存通过 render 生成的 `渲染vnode`
 - activeInstance 更新为 App 组件的实例
-- 调用 \_\_patch\_\_ 渲染 VNode，
+- 调用 __patch__ 渲染 VNode，
   - 返回结果为 App 子组件的渲染 vnode 的 elm，也就是 vnode.elm
-  - 将结果赋值给 App 子组件实例的 \$el
+  - 将结果赋值给 App 子组件实例的 $el
 - 恢复 activeInstance 为根 Vue 实例
 
-##### 调用 \_\_patch\_\_ 渲染 VNode
+##### 调用 __patch__ 渲染 VNode
 
 ```js
 vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */);
@@ -352,11 +352,10 @@ function patch(oldVnode, vnode, hydrating, removeOnly) {
 ```
 
 传入的前两个参数分别是：
-
-- oldVnode：App 子组件的 \$el，此时是 undefined
+- oldVnode：App 子组件的 $el，此时是 undefined
 - vnode：App 子组件的渲染 vnode
 
-之前分析过负责渲染成 DOM 的函数是 createElm，注意这里我们只传了 2 个参数，所以对应的 parentElm 是 undefined
+之前分析过负责渲染成 DOM 的函数是 `createElm`，注意这里我们只传了 2 个参数，所以对应的 `parentElm` 是 `undefined`
 
 ```js
 function createElm(
@@ -407,7 +406,7 @@ function createElm(
 }
 ```
 
-注意：这里我们传入的 vnode 是组件渲染的 vnode，也就是我们之前说的 vm.\_vnode
+注意：这里我们传入的 vnode 是组件渲染的 vnode，也就是我们之前说的 vm._vnode
 
 - 再次执行 createComponent 判断，此时组件根节点是普通元素，因此返回 false
 - 先创建一个父节点占位符
@@ -448,8 +447,32 @@ function initComponent(vnode, insertedVnodeQueue) {
 }
 ```
 
-这个函数主要就是将 App 子组件实例上的 \$el 保存到占位符 vnode 的 elm 属性上
+这个函数主要就是将 App 子组件实例上的 $el 保存到占位符 vnode 的 elm 属性上
 
-### 挂载子组件（组件 dom 的插入）
+### 挂载子组件（组件dom的插入）
+
+**实际上对于对组件的插入，在 createComponent 中调用了 insert 方法**
+
+```js
+function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
+  let i = vnode.data
+  if (isDef(i)) {
+    // ....
+    if (isDef(i = i.hook) && isDef(i = i.init)) {
+       // 2.1 执行 init 钩子，执行完时已经创建了一个子实例并挂载
+      i(vnode, false /* hydrating */)
+    }
+    // ...
+    if (isDef(vnode.componentInstance)) {
+      // 2.2 设置占位符vnode的elm
+      initComponent(vnode, insertedVnodeQueue)
+      // 2.3 挂载子组件
+      insert(parentElm, vnode.elm, refElm)
+      // ...
+      return true
+    }
+  }
+}
+```
 
 在完成组件的整个 patch 过程后，最后执行 `insert(parentElm, vnode.elm, refElm)` 完成组件的 DOM 插入，如果组件 patch 过程中又创建了子组件，那么 DOM 的插入顺序是**先子后父**。`parentElm`最后会是 body
