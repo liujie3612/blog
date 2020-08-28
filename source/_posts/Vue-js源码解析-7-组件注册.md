@@ -60,7 +60,7 @@ export function initAssetRegisters(Vue: GlobalAPI) {
 }
 ```
 
-函数首先遍历 `ASSET_TYPES`，得到 type 后挂载到 Vue 上 。ASSET_TYPES 的定义在 `src/shared/constants.js` 中：
+函数首先遍历 `ASSET_TYPES`，得到 type 后挂载到 Vue 上 。`ASSET_TYPES` 的定义在 `src/shared/constants.js` 中：
 
 ```js
 export const ASSET_TYPES = ["component", "directive", "filter"];
@@ -68,14 +68,15 @@ export const ASSET_TYPES = ["component", "directive", "filter"];
 
 所以实际上 Vue 是初始化了 3 个全局函数，并且如果 `type` 是 `component` 且 `definition` 是一个 `对象` 的话，通过 `this.opitons._base.extend`， 相当于 `Vue.extend` 把这个对象转换成一个**继承于 Vue 的构造函数**，最后通过 `this.options[type + 's'][id] = definition` 把它挂载到 `Vue.options.components` 上。
 
-由于我们每个组件的创建都是通过 `Vue.extend` 继承而来，Vue.extend函数的继承的过程中有这么一段逻辑：
+由于我们每个组件的创建都是通过 `Vue.extend` 继承而来，`Vue.extend` 函数的继承的过程中有这么一段逻辑：
 
 ```js
 Sub.options = mergeOptions(Super.options, extendOptions);
 ```
-也就是说它会把 `Vue.options` 合并到 `Sub.options`，也就是组件的 options 上， 然后在组件的实例化阶段，会执行 merge options 逻辑，把 `Sub.options.components` 合并到 `vm.$options.components` 上。
+也就是说它会把 `Vue.options` 合并到 `Sub.options`，也就是组件的 options 上， 然后在组件的实例化阶段，会执行 `merge options` 逻辑，把 `Sub.options.components` 合并到 `vm.$options.components` 上。
 
 然后再创建`vnode`的过程中，会执行 `_createElement` 方法，我们再来回顾一下这部分的逻辑，它的定义在 `src/core/vdom/create-element.js` 中：
+
 ```js
 export function _createElement (
   context: Component,
@@ -113,7 +114,6 @@ export function _createElement (
   }
   // ...
 }
-
 ```
 
 这里有一个判断逻辑 `isDef(Ctor = resolveAsset(context.$options, 'components', tag))`，先来看一下 `resolveAsset` 的定义，在 `src/core/utils/options.js` 中：
@@ -151,7 +151,13 @@ export function resolveAsset (
   return res
 }
 ```
-这段逻辑很简单，先通过 `const assets = options[type]` 拿到 `assets`，然后再尝试拿 `assets[id]`，这里有个顺序，先直接使用 `id` 拿，如果不存在，则把 `id` 变成`驼峰`的形式再拿，如果仍然不存在则在`驼峰`的基础上把`首字母变成大写`的形式再拿，如果仍然拿不到则报错。这样说明了我们在使用 `Vue.component(id, definition)` 全局注册组件的时候，id 可以是连字符、驼峰或首字母大写的形式。
+这段逻辑很简单，先通过 `const assets = options[type]` 拿到 `assets`，然后再尝试拿 `assets[id]`，这里有个顺序: 
+
+1. 先直接使用 `id` 拿，如果不存在，则把 `id` 变成`驼峰`的形式再拿
+2. 如果仍然不存在则在`驼峰`的基础上把`首字母变成大写`的形式再拿
+3. 如果仍然拿不到则报错。
+
+这样说明了我们在使用 `Vue.component(id, definition)` 全局注册组件的时候，`id` 可以是字符、驼峰或首字母大写的形式。
 
 那么回到我们的调用 `resolveAsset(context.$options, 'components', tag)`，即拿 `vm.$options.components[tag]`，这样我们就可以在 `resolveAsset` 的时候拿到这个组件的构造函数，并作为 `createComponent` 的钩子的参数。
 
