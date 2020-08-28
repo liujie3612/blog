@@ -119,9 +119,11 @@ export function initGlobalAPI(Vue: GlobalAPI) {
   extend(Vue.options.components, builtInComponents);
   // ...
 }
+
 ```
 * 通过 Object.create(null) 创建一个空对象并赋值给 `Vue.options`
 * 然后遍历 `ASSET_TYPES`，这里的 ASSET_TYPES 是一个常量：
+* 
 ```js
 export const ASSET_TYPES = [
   'component',

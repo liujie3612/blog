@@ -1,18 +1,21 @@
 ---
-title: Vue-js源码解析(7) - 组件注册
+title: Vue.js源码解析(7) - 组件注册
 date: 2020-08-22 15:23:17
 tags:
+  - vue
+  - 源码解析
+  - 源码
 ---
 
-在 Vue.js 中，除了它内置的组件如 keep-alive、component、transition、transition-group 等，其它用户自定义组件在使用前必须注册。很多同学在开发过程中可能会遇到如下报错信息：
+在 Vue.js 中，除了它内置的组件如 `keep-alive`、`component`、`transition`、`transition-group` 等，其它用户自定义组件在使用前必须注册。很多同学在开发过程中可能会遇到如下报错信息：
 ![](https://cdn.liujiefront.com/images/algorithm/j8xc9.png)
-一般报这个错的原因都是我们使用了未注册的组件。Vue.js 提供了 2 种组件的注册方式，全局注册和局部注册。接下来我们从源码分析的角度来分析这两种注册方式。
+一般报这个错的原因都是我们使用了未注册的组件。Vue.js 提供了 2 种组件的注册方式，**全局注册**和**局部注册**。接下来我们从源码分析的角度来分析这两种注册方式。
 
 <!-- more -->
 
-# 全局注册
+# 1. 全局注册
 
-要注册一个全局组件，可以使用 Vue.component(tagName, options)。例如：
+要注册一个全局组件，可以使用 `Vue.component(tagName, options)`。例如：
 
 ```js
 Vue.component("my-component", {
@@ -20,7 +23,7 @@ Vue.component("my-component", {
 });
 ```
 
-那么，Vue.component 函数是在什么时候定义的呢，它的定义过程发生在最开始初始化 Vue 的全局函数的时候，代码在 `src/core/global-api/assets.js` 中：
+那么，`Vue.component` 函数是在什么时候定义的呢，它的定义过程发生在最开始初始化 Vue 的全局函数的时候，代码在 `src/core/global-api/assets.js` 中：
 
 ```js
 import { ASSET_TYPES } from "shared/constants";
@@ -63,10 +66,110 @@ export function initAssetRegisters(Vue: GlobalAPI) {
 export const ASSET_TYPES = ["component", "directive", "filter"];
 ```
 
-所以实际上 Vue 是初始化了 3 个全局函数，并且如果 type 是 component 且 definition 是一个对象的话，通过 `this.opitons._base.extend`， 相当于 `Vue.extend` 把这个对象转换成一个继承于 Vue 的构造函数，最后通过 `this.options[type + 's'][id] = definition` 把它挂载到 `Vue.options.components` 上。
+所以实际上 Vue 是初始化了 3 个全局函数，并且如果 `type` 是 `component` 且 `definition` 是一个 `对象` 的话，通过 `this.opitons._base.extend`， 相当于 `Vue.extend` 把这个对象转换成一个**继承于 Vue 的构造函数**，最后通过 `this.options[type + 's'][id] = definition` 把它挂载到 `Vue.options.components` 上。
 
-由于我们每个组件的创建都是通过 Vue.extend 继承而来，我们之前分析过在继承的过程中有这么一段逻辑：
+由于我们每个组件的创建都是通过 `Vue.extend` 继承而来，Vue.extend函数的继承的过程中有这么一段逻辑：
 
 ```js
 Sub.options = mergeOptions(Super.options, extendOptions);
 ```
+也就是说它会把 `Vue.options` 合并到 `Sub.options`，也就是组件的 options 上， 然后在组件的实例化阶段，会执行 merge options 逻辑，把 `Sub.options.components` 合并到 `vm.$options.components` 上。
+
+然后再创建`vnode`的过程中，会执行 `_createElement` 方法，我们再来回顾一下这部分的逻辑，它的定义在 `src/core/vdom/create-element.js` 中：
+```js
+export function _createElement (
+  context: Component,
+  tag?: string | Class<Component> | Function | Object,
+  data?: VNodeData,
+  children?: any,
+  normalizationType?: number
+): VNode | Array<VNode> {
+  // ...
+  let vnode, ns
+  if (typeof tag === 'string') {
+    let Ctor
+    ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
+    if (config.isReservedTag(tag)) {
+      // platform built-in elements
+      vnode = new VNode(
+        config.parsePlatformTagName(tag), data, children,
+        undefined, undefined, context
+      )
+    } else if (isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
+      // component
+      vnode = createComponent(Ctor, data, context, children, tag)
+    } else {
+      // unknown or unlisted namespaced elements
+      // check at runtime because it may get assigned a namespace when its
+      // parent normalizes children
+      vnode = new VNode(
+        tag, data, children,
+        undefined, undefined, context
+      )
+    }
+  } else {
+    // direct component options / constructor
+    vnode = createComponent(tag, data, context, children)
+  }
+  // ...
+}
+
+```
+
+这里有一个判断逻辑 `isDef(Ctor = resolveAsset(context.$options, 'components', tag))`，先来看一下 `resolveAsset` 的定义，在 `src/core/utils/options.js` 中：
+
+```js
+/**
+ * Resolve an asset.
+ * This function is used because child instances need access
+ * to assets defined in its ancestor chain.
+ */
+export function resolveAsset (
+  options: Object,
+  type: string,
+  id: string,
+  warnMissing?: boolean
+): any {
+  /* istanbul ignore if */
+  if (typeof id !== 'string') {
+    return
+  }
+  // vm.$options.components
+  const assets = options[type]
+
+  // 局部注册优先：在对象自身查找
+  if (hasOwn(assets, id)) return assets[id]
+  // camelize: app-child => appChild
+  const camelizedId = camelize(id)
+  if (hasOwn(assets, camelizedId)) return assets[camelizedId]
+  // capitalize: appChild => AppChild
+  const PascalCaseId = capitalize(camelizedId)
+  if (hasOwn(assets, PascalCaseId)) return assets[PascalCaseId]
+  //  // 去原型链找全局注册
+  const res = assets[id] || assets[camelizedId] || assets[PascalCaseId]
+  // ...
+  return res
+}
+```
+这段逻辑很简单，先通过 `const assets = options[type]` 拿到 `assets`，然后再尝试拿 `assets[id]`，这里有个顺序，先直接使用 `id` 拿，如果不存在，则把 `id` 变成`驼峰`的形式再拿，如果仍然不存在则在`驼峰`的基础上把`首字母变成大写`的形式再拿，如果仍然拿不到则报错。这样说明了我们在使用 `Vue.component(id, definition)` 全局注册组件的时候，id 可以是连字符、驼峰或首字母大写的形式。
+
+那么回到我们的调用 `resolveAsset(context.$options, 'components', tag)`，即拿 `vm.$options.components[tag]`，这样我们就可以在 `resolveAsset` 的时候拿到这个组件的构造函数，并作为 `createComponent` 的钩子的参数。
+
+**总结**： `Vue.component`核心逻辑就是通过 `Vue.extend` 创建组件子类构造函数并挂载到 `Vue.options.components[id]`
+
+#  2. 局部注册
+
+Vue.js 也同样支持局部注册，我们可以在一个组件内部使用 `components` 选项做组件的局部注册，例如：
+```js
+import HelloWorld from './components/HelloWorld'
+
+export default {
+  components: {
+    HelloWorld
+  }
+}
+```
+
+其实理解了全局注册的过程，局部注册是非常简单的。在组件的 Vue 的实例化阶段有一个合并 option 的逻辑，之前我们也分析过，所以就把 `components` 合并到 `vm.$options.components` 上，这样我们就可以在 `resolveAsset` 的时候拿到这个组件的构造函数，并作为 `createComponent` 的钩子的参数。
+
+注意，局部注册和全局注册不同的是，只有该类型的组件才可以访问局部注册的子组件，而全局注册是扩展到 `Vue.options` 下，所以在所有组件创建的过程中，都会从全局的 `Vue.options.components` 扩展到当前组件的 `vm.$options.components` 下，这就是全局注册的组件能被任意使用的原因。
