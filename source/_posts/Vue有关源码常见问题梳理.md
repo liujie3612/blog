@@ -134,6 +134,7 @@ let newEndIdx = newCh.length - 1;
 
 ![](https://cdn.liujiefront.com/images/vue-source/smf41.png)
 
+
 ## 为什么不用 index 作为 key？
 
 回到一开始的话题，如果用了 index 作为 key 会怎么样？

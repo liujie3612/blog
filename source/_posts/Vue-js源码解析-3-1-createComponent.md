@@ -1,10 +1,11 @@
 ---
-title: Vue.js源码解析(3) - createComponent
+title: Vue.js源码解析 3-1-createComponent
 date: 2020-08-18 15:42:11
 tags:
 - vue
 - 源码解析
 - 源码
+- 组件化
 ---
 
 Vue.js 另一个核心思想是组件化。所谓组件化，就是把页面拆分成多个组件 (component)，每个组件依赖的 CSS、JavaScript、模板、图片等资源放在一起开发和维护。组件是资源独立的，组件在系统内部可复用，组件和组件之间可以嵌套。

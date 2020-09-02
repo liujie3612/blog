@@ -1,5 +1,5 @@
 ---
-title: Vue.js源码解析(1) - 准备工作
+title: Vue.js源码解析 1-1-准备工作
 date: 2020-04-12 23:11:21
 tags:
 - vue
@@ -54,7 +54,7 @@ compiler 目录包含 Vue.js 所有编译相关的代码。它包括
 2. ast 语法树优化
 3. 3代码生成等功能等
 
-编译分为`Runtime Only` 和 `Runtime + Compiler`，我们在利用 vue-cli 去初始化我们的 Vue.js 项目的时候会询问我们用 Runtime Only 版本的还是 Runtime + Compiler 版本，Runtime Only是说借助如 webpack 的 vue-loader 工具把 .vue 文件编译成 JavaScript，因为是在编译阶段做的，所以它只包含运行时的 Vue.js 代码，因此代码体积也会更轻量。
+编译分为`Runtime Only` 和 `Runtime + Compiler`，我们在利用 `vue-cli` 去初始化我们的 Vue.js 项目的时候会询问我们用 `Runtime Only` 版本的还是 `Runtime + Compiler` 版本，`Runtime Only`是说借助如 webpack 的 vue-loader 工具把 .vue 文件编译成 JavaScript，因为是在编译阶段做的，所以它只包含运行时的 Vue.js 代码，因此代码体积也会更轻量。
 
 ### core
 包含了 Vue.js 的核心代码，包括内置组件、全局 API 封装，Vue 实例化、观察者、虚拟 DOM、工具函数等等。是重点需要分析的目录
@@ -88,7 +88,7 @@ function Vue (options) {
   this._init(options)
 }
 ```
-它实际上就是一个用 Function 实现的类，我们只能通过 new Vue 去实例化它,至于为什么不用ES6 的 Class，是因为后面有很多的混入函数，比如`initMixin`,`stateMixin`等xxxMixin的函数调用，我们把Vue传进去的时候，就能给 Vue 的 prototype 上扩展一些方法，这么做的好处是非常方便代码的维护和管理，这种编程技巧也非常值得我们去学习。
+它实际上就是一个用 `Function` 实现的类，我们只能通过 new Vue 去实例化它,至于为什么不用ES6 的 Class，是因为后面有很多的混入函数，比如`initMixin`,`stateMixin`等`xxxMixin`的函数调用，我们把Vue传进去的时候，就能给 Vue 的 prototype 上扩展一些方法，这么做的好处是非常方便代码的维护和管理，这种编程技巧也非常值得我们去学习。
 
 ### initGlobalAPI
 
