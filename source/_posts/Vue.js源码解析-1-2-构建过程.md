@@ -16,6 +16,8 @@ tags:
 | 完整版 (生产环境) | vue.min.js	 | - | - | vue.esm.browser.min.js |
 | 运行时版 (生产环境) | vue.runtime.min.js | - | - | - |
 
+<!--more-->
+
 dist目录是打包后的文件列表：
 
 ![](https://cdn.liujiefront.com/images/algorithm/cly0k.png)

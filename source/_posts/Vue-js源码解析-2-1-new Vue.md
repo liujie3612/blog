@@ -27,6 +27,8 @@ tags:
 * —> src/core/index.js
 * —> src/core/instance/index.js (核心)
 
+<!--more-->
+
 Vue 构造函数定义就在`src/core/instance/index.js`中
 
 # Vue定义:

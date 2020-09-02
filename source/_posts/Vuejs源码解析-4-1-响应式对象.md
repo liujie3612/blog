@@ -28,6 +28,9 @@ export function initState (vm: Component) {
   }
 }
 ```
+
+<!--more-->
+
 `initState` 方法主要是对 `props`、`methods`、`data`、`computed`和 `wathcer` 等属性做了初始化操作。这里我们重点分析 **props 和 data**，对于其它属性的初始化我们之后再详细分析。
 
 <!--more-->
