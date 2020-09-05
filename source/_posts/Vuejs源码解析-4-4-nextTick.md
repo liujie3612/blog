@@ -21,7 +21,7 @@ tags:
 
 除了广义上的定义，我们可以将任务进行更精细的定义，分为`宏任务`与`微任务`：
 
-<!-more-->
+<!--more-->
 
 1. 宏任务（macro-task）： 包括整体代码`script`、`ajax`，`dom`、`MessageChannel`、`postMessage`、`setInterval`、`setImmediate`、`setTimeout`操作
 2. 微任务（micro-task）： `Promise.then`,`MutationObsever`
