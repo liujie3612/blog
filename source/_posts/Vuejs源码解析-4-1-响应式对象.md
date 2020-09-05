@@ -6,6 +6,7 @@ tags:
 - 源码解析
 - 源码
 - 响应式原理
+- 响应式对象
 ---
 
 # initState
@@ -67,10 +68,12 @@ function initProps (vm: Component, propsOptions: Object) {
 }
 ```
 `initProps` 的初始化主要过程：
+
 1. 关闭观测的开关，具体的之后章节还会介绍，这里先简单了解：
    - 将 `src/core/observer/index.js` 文件中的 `shouldObserve` 全局变量置为 `false`。
    - 这使得  `defineReactive` 中调用 `observe` 是一个无效调用。
-   - 因为对于对象的 prop 值，`子组件的prop值` 始终指向`父组件的prop值`，只要`父组件的prop值`变化，就会触发子组件的重新渲染，所以这个 `observe 过程`是可以省略的。
+   - 因为对于对象的 `prop 值`，`子组件的prop值` 始终指向`父组件的prop值`，只要`父组件的prop值`变化，就会触发子组件的重新渲染，所以这个 `observe 过程`是可以省略的。
+  
 2. 遍历定义的 props 配置。遍历的过程主要做两件事情：
    - 一个是调用 `defineReactive` 方法把每个 `prop` 对应的值变成响应式，可以通过 `vm._props.xxx` 访问到定义 `props` 中**对应的属性**。
    - 另一个是通过 `proxy` 把对 `vm.xxx` 的访问代理到 `vm._props.xxx` 上。这里的一个细节是对于非根实例的子组件而言，代理发生在 `Vue.extend阶段`，在之后章节还会介绍。
@@ -109,7 +112,7 @@ function initData (vm: Component) {
 
 可以看到，无论是 `props` 或是 `data` 的初始化都是把它们变成响应式对象，这个过程我们接触到几个函数，接下来我们来详细分析它们。
 
-## proxy
+# proxy
 
 首先介绍一下代理，代理的作用是把 `props` 和 `data` 上的属性代理到 `vm实例`上，这也就是为什么比如我们定义了如下 props，却可以通过 vm 实例访问到它。
 
@@ -150,9 +153,10 @@ proxy 方法的实现很简单，通过 `Object.defineProperty` 把 `target[sour
 
 所以对于 `props` 而言，对 `vm._props.xxx` 的读写变成了 `vm.xxx` 的读写，而对于 `vm._props.xxx` 我们可以访问到定义在 props 中的属性，所以我们就可以通过 `vm.xxx` 访问到定义在 `props` 中的 xxx 属性了。同理，对于 data 而言，对 `vm._data.xxxx` 的读写变成了对 `vm.xxxx` 的读写，而对于 `vm._data.xxxx` 我们可以访问到定义在 data 函数返回对象中的属性，所以我们就可以通过 `vm.xxxx` 访问到定义在 data 函数返回对象中的 xxxx 属性了。
 
-## observe
+# observe
 
 `observe` 的功能就是用来监测数据的变化，它的定义在 `src/core/observer/index.js` 中：
+
 ```js
 export function observe (value: any, asRootData: ?boolean): Observer | void {
   if (!isObject(value) || value instanceof VNode) {
@@ -178,9 +182,9 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
 ```
 
 `observe` 方法的作用就是给`非VNode` 的对象类型数据添加一个 `Observer`，如果已经添加过则直接返回，否则在满足一定条件下（见注释）去实例化一个 Observer 对象实例。
-接下来我们来看一下 Observer 的作用。
+接下来我们来看一下 `Observer` 的作用。
 
-## Observer
+# Observer
 
 Observer 是一个类，它的作用是给对象的属性添加 `getter` 和 `setter`，用于**依赖收集**和**派发更新**：
 ```js
@@ -242,11 +246,12 @@ def 函数是一个非常简单的`Object.defineProperty` 的封装，这就是�
 
   - value 对象上多了一个 __ob__ 的属性，指向 Observer 实例。
   - 同时 `enumerable` 默认置为 false，这样当 for 循环时不会遍历到这个属性。
+  
 3. 对 value 做判断，对于数组会调用 `observeArray` 方法，否则对纯对象调用 `walk` 方法。可以看到 `observeArray` 是遍历数组**再次调用** `observe` 方法
 4. 而 walk 方法是遍历对象的 key 调用 `defineReactive` 方法
 
 
-## defineReactive
+# defineReactive
 
 `defineReactive` 的功能就是定义一个响应式对象，给对象动态添加 getter 和 setter，它的定义在 `src/core/observer/index.js` 中：
 ```js
@@ -339,6 +344,7 @@ export function defineReactive (
     }
 }
 ```
+<!-- value的值为对象和数组时，会有一个`__ob__`属性， -->
 
 流程图：
 ![](https://cdn.liujiefront.com/images/algorithm/xhh7t.png)

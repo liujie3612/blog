@@ -6,6 +6,7 @@ tags:
   - 源码解析
   - 源码
   - 组件化
+  - patch
 ---
 
 之前的章节分析我们已经知道，当我们通过 createComponent 创建了组件 VNode，接下来会走到 vm._update，执行 `vm.__patch__` 去把 VNode 转换成真正的 DOM 节点。
