@@ -26,7 +26,10 @@ var app = new Vue({
   render: h => h(App)
 })
 ```
-这里的 h 是 `createElement` 方法，上一节的学习中我们了解到它最终会调用 `_createElement` 方法，其中有一段逻辑是对参数 tag 的判断，如果是一个普通的 html 标签，则会实例化一个普通 VNode 节点，否则通过 `createComponent` 方法创建一个组件 VNode。
+这里的 h 是 `createElement` 方法，上一节的学习中我们了解到它最终会调用 `_createElement` 方法，其中有一段逻辑是对参数 `tag` 的判断：
+1. 如果是一个`普通的 html 标签`，则会实例化一个`普通 VNode 节点`
+2. 否则通过 `createComponent` 方法创建一个`组件 VNode`。
+   
 ``` js
 if (typeof tag === 'string') {
 
@@ -155,7 +158,7 @@ Vue.extend = function (extendOptions: Object): Function {
 ```
 `Vue.extend` 的作用就是：
 1. 定义子类构造函数 `Sub`，基于原型链继承于 Vue（把一个**纯对象**转换一个**继承于 Vue 的构造器 Sub** 并返回（对象转函数））
-2. 对 Sub 这个对象本身扩展了一些属性，如：
+2. 对 `Su`b 这个对象本身扩展了一些属性，如：
    - 扩展 options，添加全局 API
    - 对配置中的 props 和 computed 做了初始化工作。
    - initProps
@@ -179,12 +182,12 @@ function installComponentHooks (data: VNodeData) {
 }
 ```
 这里需要了解两个东西：
-- componentVNodeHooks对象
-- mergeHook函数
+- `componentVNodeHooks对象`
+- `mergeHook`函数
 
 #### componentVNodeHooks
 
-Vue.js 使用的 Virtual DOM 参考的是开源库 snabbdom，它的一个特点是在 VNode 的 patch 流程中对外暴露了各种时机的钩子函数，方便我们做一些额外的事情，Vue.js 也是充分利用这一点，在初始化一个 Component 类型的 VNode 的过程中实现了几个钩子函数：
+Vue.js 使用的 `Virtual DOM` 参考的是开源库 snabbdom，它的一个特点是在` VNode` 的 `patch` 流程中对外暴露了各种时机的钩子函数，方便我们做一些额外的事情，Vue.js 也是充分利用这一点，在初始化一个 `Component` 类型的 `VNode` 的过程中实现了几个`钩子函数`：
 ```js
 const componentVNodeHooks = {
   init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
@@ -217,9 +220,11 @@ function mergeHook (f1: any, f2: any): Function {
   return merged
 }
 ```
-`mergeHook` 函数逻辑很简单，所谓合并就是先执行 `componentVNodeHooks` 定义的, 再执行 data.hooks 定义的，再将合并标志位设为 true。
+`mergeHook` 函数逻辑很简单，所谓合并就是先执行 `componentVNodeHooks` 定义的, 再执行 `data.hooks` 定义的，再将合并**标志位**设为 `true`。
 
-所以`installComponentHooks`的过程就是把 `componentVNodeHooks` 的钩子函数合并到 `data.hook` 中，在 VNode 执行 patch 的过程中执行相关的钩子函数，具体的执行我们稍后在介绍 patch 过程中会详细介绍。这里要注意的是合并策略，在合并过程中，如果某个时机的钩子已经存在 data.hook 中，那么通过执行 mergeHook 函数做合并，这个逻辑很简单，就是在最终执行的时候，依次执行这两个钩子函数即可。
+所以`installComponentHooks`的过程就是把 `componentVNodeHooks` 的钩子函数合并到 `data.hook` 中，在 `VNode` 执行 `patch` 的过程中执行相关的**钩子函数**，具体的执行我们稍后在介绍 `patch` 过程中会详细介绍。
+
+这里要注意的是合并策略，在合并过程中，如果某个时机的钩子已经存在 `data.hook` 中，那么通过执行 `mergeHook` 函数做合并，这个逻辑很简单，就是在最终执行的时候，依次执行这两个钩子函数即可。
 
 ### 实例化 VNode
 ```js
@@ -232,10 +237,10 @@ const vnode = new VNode(
 )
 return vnode
 ```
-1. 通过 new VNode 实例化一个 vnode 并返回。
+1. 通过 `new VNode` 实例化一个 vnode 并返回。
 2. 和普通元素节点的 vnode 不同，**组件的 vnode 没有 children**，这点很关键，在之后的 patch 过程中我们会再提。
 3. 第七个参数是 `componentOptions` ，在 patch 过程中可以通过 `new vnode.componentOptions.Ctor` 来实例化子组件构造函数
 
 ## 总结：
 
-这一节我们分析了 createComponent 的实现，了解到它在渲染一个组件的时候的 3 个关键逻辑：`构造子类构造函数`，`安装组件钩子函数`和`实例化 vnode`。createComponent 后返回的是组件 vnode，它也一样走到 vm._update 方法，进而执行了 patch 函数，我们在上一章对 patch 函数做了简单的分析，那么下一节我们会对它做进一步的分析。
+这一节我们分析了 `createComponent` 的实现，了解到它在渲染一个组件的时候的 3 个关键逻辑：`构造子类构造函数`，`安装组件钩子函数`和`实例化 vnode`。`createComponent` 后返回的是`组件vnode`，它也一样走到 `vm._update` 方法，进而执行了 `patch 函数`，我们在上一章对 patch 函数做了简单的分析，那么下一节我们会对它做进一步的分析。

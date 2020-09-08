@@ -22,6 +22,7 @@ export function initState (vm: Component) {
 `initComputed` 的定义在 `src/core/instance/state.js` 中：
 
 <!--more-->
+
 # initComputed
 
 ```js
