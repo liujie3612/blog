@@ -7,6 +7,7 @@ tags:
   - 源码
   - 组件化
   - 组件注册
+categories: Vue源码解析
 ---
 
 在 Vue.js 中，除了它内置的组件如 `keep-alive`、`component`、`transition`、`transition-group` 等，其它用户自定义组件在使用前必须注册。很多同学在开发过程中可能会遇到如下报错信息：

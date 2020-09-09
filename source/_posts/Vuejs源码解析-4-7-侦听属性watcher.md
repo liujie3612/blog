@@ -7,7 +7,9 @@ tags:
 - 源码
 - 响应式原理
 - watch
+categories: Vue源码解析
 ---
+
 
 # 初始化过程
 
@@ -18,6 +20,8 @@ if (opts.watch && opts.watch !== nativeWatch) {
   initWatch(vm, opts.watch)
 }
 ```
+
+![](https://cdn.liujiefront.com/images/algorithm/z09u0.png)
 
 <!--more-->
 

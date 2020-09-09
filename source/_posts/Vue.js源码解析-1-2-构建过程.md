@@ -5,6 +5,7 @@ tags:
 - vue
 - 源码解析
 - 源码
+categories: Vue源码解析
 ---
 
 # 不同的vue版本

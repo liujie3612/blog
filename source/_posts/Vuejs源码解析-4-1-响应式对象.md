@@ -7,6 +7,7 @@ tags:
 - 源码
 - 响应式原理
 - 响应式对象
+categories: Vue源码解析
 ---
 
 # initState

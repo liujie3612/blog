@@ -7,6 +7,7 @@ tags:
 - 源码
 - 响应式原理
 - computed
+categories: Vue源码解析
 ---
 
 

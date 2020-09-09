@@ -7,6 +7,7 @@ tags:
   - 源码
   - 组件化
   - 合并配置
+categories: Vue源码解析
 ---
 
 new Vue 的过程通常有 2 种场景：

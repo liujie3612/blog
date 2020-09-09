@@ -6,6 +6,7 @@ tags:
 - 源码解析
 - 源码
 - 数据驱动
+categories: Vue源码解析
 ---
 
 # new Vue发生了什么

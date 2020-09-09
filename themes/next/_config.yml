@@ -28,11 +28,12 @@ canonical: true
 
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
-  home: /
+  # home: /
   # categories: /categories
   #about: /about
-  tags: /tags
-  archives: /archives
+  vue_source_code: /categories/Vue源码解析
+  # tags: /tags
+  # archives: /archives
   links: /links
   # schedule: /schedule
   #commonweal: /404.html
@@ -54,6 +55,7 @@ menu_icons:
   archives: archive
   commonweal: heartbeat
   links: link
+  vue_source_code: vuejs
 
 
 
@@ -152,7 +154,6 @@ social_icons:
 # Table Of Contents in the Sidebar
 toc:
   enable: true
-
   # Automatically add list number to toc.
   number: true
 
@@ -416,7 +417,8 @@ vendors:
 
   # Internal version: 4.4.0
   # See: http://fontawesome.io/
-  fontawesome: //cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css
+  fontawesome: https://cdn.liujiefront.com/css/fontawesome/5.14.0/all.min.css
+
 
 # Assets
 css: css

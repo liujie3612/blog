@@ -5,6 +5,7 @@ tags:
   - vue
   - 源码解析
   - 面试
+categories: vue常见问题梳理
 ---
 
 # v-for中为什么要用key

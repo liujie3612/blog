@@ -7,6 +7,7 @@ tags:
 - 源码
 - 响应式原理
 - nextTick
+categories: Vue源码解析
 ---
 
 广义上将 JavaScript 所有任务可以分成两种，一种是同步任务（synchronous），另一种是异步任务（asynchronous）。
