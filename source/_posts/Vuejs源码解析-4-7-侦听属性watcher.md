@@ -11,7 +11,7 @@ categories: Vue源码解析
 ---
 
 
-# 初始化过程
+# 1. 初始化过程
 
 侦听属性的初始化也是发生在 Vue 的实例初始化阶段的 `initState` 函数中，在 `computed 初始化之后`，执行了：
 
@@ -118,7 +118,7 @@ function stateMixin(Vue) {
 4. 如果我们设置了 `immediate` 为 `true`，则`直接会执行回调函数 cb`。
 5. 最后返回了一个 `unwatchFn` 方法，它会调用 `teardown` 方法去**移除**这个 `watcher`
 
-# 依赖收集
+# 2. 依赖收集
 
 ```js
 var vm = new Vue({
