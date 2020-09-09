@@ -609,7 +609,7 @@ function proxy(target, sourceKey, key) {
 ```
 
 当访问 `this.name` 的时候就相当于访问 `this._props.name`。
-其实对于非根实例的子组件而言，`prop` 的代理发生在 `Vue.extend` 阶段（在之前的章节也介绍过），在 `src/core/global-api/extend.js` 中：
+其实对于**非根实例**的子组件而言，`prop` 的代理发生在 `Vue.extend` 阶段（在之前的章节也介绍过），在 `src/core/global-api/extend.js` 中：
 ```js
 Vue.extend = function (extendOptions: Object): Function {  
   // ...  
@@ -641,9 +641,9 @@ function initProps (Comp) {  
 
 # 4 Props更新
 
-我们知道，当父组件传递给子组件的 props 值变化，子组件对应的值也会改变，同时会触发子组件的重新渲染。那么接下来我们就从源码角度来分析这两个过程。
+我们知道，当父组件传递给子组件的 `props` 值变化，子组件对应的值也会改变，同时会触发子组件的重新渲染。那么接下来我们就从源码角度来分析这两个过程。
 
-## 4.1 子组件 props 更新
+## 4.1 子组件 props 更新(updateChildComponent)
 
 首先，`prop` 数据的值变化在父组件，我们知道在父组件的 `render` 过程中会访问到这个 `prop` 数据，所以当 `prop` 数据变化一定会触发父组件的`重新渲染`，那么重新渲染是如何更新子组件对应的 prop 的值呢？
 
@@ -668,7 +668,7 @@ function patchVnode (
   // ...
 }
 ```
-`prepatch` 函数定义在 `src/core/vdom/create-component.js` 中：
+`prepatch` 函数定义在 `src/core/vdom/create-component.js` 中,详情见组件更新里的新旧节点相同时里的[执行 prepatch 钩子函数](https://blog.liujiefront.com/2020/09/07/Vuejs%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-4-8-%E7%BB%84%E4%BB%B6%E6%9B%B4%E6%96%B0/)
 ```js
 prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
   const options = vnode.componentOptions
@@ -703,6 +703,8 @@ function updateChildComponent(
     for (var i = 0; i < propKeys.length; i++) {
       var key = propKeys[i];
       var propOptions = vm.$options.props; // wtf flow?
+      // 遍历 propKeys 重新验证和计算新的 `prop` 数据 更新 `vm._props` 
+      // 更新子组件的 `props`
       props[key] = validateProp(key, propOptions, propsData, vm);
     }
     toggleObserving(true);
@@ -713,18 +715,153 @@ function updateChildComponent(
    // ...
 }
 ```
-我们重点来看更新 `props` 的相关逻辑，这里的 `propsData` 是`父组件`传递的 `props` 数据，`vm` 是子组件的实例。`vm._props` 指向的就是子组件的 `props` 值，`propKeys` 就是在之前 `initProps` 过程中，缓存的子组件中定义的所有 `prop` 的 `key`
+`vnode.componentOptions.propsData` 就是父组件传递给子组件的 `prop 数据`,在`组件的 render` 过程中，对于组件节点会通过 `createComponent` 方法来创建`组件 vnode`：
+```js
+export function createComponent (
+  Ctor: Class<Component> | Function | Object | void,
+  data: ?VNodeData,
+  context: Component,
+  children: ?Array<VNode>,
+  tag?: string
+): VNode | Array<VNode> | void {
+  // ...
+
+  // extract props
+  const propsData = extractPropsFromVNodeData(data, Ctor, tag)
+
+  // ...
+  
+  const vnode = new VNode(
+    `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
+    data, undefined, undefined, undefined, context,
+    { Ctor, propsData, listeners, tag, children },
+    asyncFactory
+  )
+
+  // ...
+  
+  return vnode
+}
+```
+
+在创建`组件 vnode` 的过程中，首先从 `data` 中提取出 `propData`，然后在 `new VNode` 的时候，作为`第七个参数` `VNodeComponentOptions` 中的`一个属性`传入，所以我们可以通过 `vnode.componentOptions.propsData` 拿到 `prop` 数据。
+
+重点来看更新 `props` 的相关逻辑，这里的 `propsData` 是`父组件`传递的 `props` 数据，`vm` 是子组件的实例。
+`vm._props` 指向的就是子组件的 `props` 值，`propKeys` 就是在之前 `initProps` 过程中，缓存的子组件中定义的所有 `prop` 的 `key`
 
 主要逻辑就是遍历 `propKeys`，然后执行 `props[key] = validateProp(key, propOptions, propsData, vm)` 重新验证和计算新的 `prop` 数据，更新 `vm._props`，也就是子组件的 `props`
 
-这个就是子组件 `props` 的更新过程。
+**这个就是子组件 `props` 的更新过程**。
 
 ## 4.2 子组件重新渲染
 
-其实子组件的重新渲染有 2 种情况，一个是 prop 值被修改，另一个是对象类型的 prop 内部属性的变化。
+其实子组件的重新渲染有 2 种情况
+1. prop 值被修改
+2. `对象类型`的 prop 内部属性的变化。
 
-先来看一下 prop 值被修改的情况，当执行 `props[key] = validateProp(key, propOptions, propsData, vm)` 更新子组件 `prop` 的时候，会触发 `prop` 的 `setter` 过程，只要在渲染子组件的时候访问过这个 `prop` 值，那么根据响应式原理，就会触发子组件的重新渲染。
+先来看一下 prop 值被修改的情况，当执行 `props[key] = validateProp(key, propOptions, propsData, vm)` 更新子组件 `prop` 的时候，会触发 `prop` 的 `setter` 过程，只要在渲染子组件的时候访问过这个 `prop` 值，那么根据`响应式原理`，就会触发子组件的重新渲染。
 
-再来看一下当对象类型的 `prop` 的内部属性发生变化的时候，这个时候其实并没有触发子组件 `prop` 的更新。但是在子组件的渲染过程中，访问过这个对象 `prop`，所以这个对象 `prop` 在触发 `getter` 的时候会把子组件的 `render watcher` 收集到依赖中，然后当我们在父组件更新这个对象 `prop` 的某个属性的时候，会触发 `setter` 过程，也就会通知子组件 `render watcher` 的 `update`，进而触发子组件的重新渲染。
+再来看一下当对象类型的 `prop` 的内部属性发生变化的时候，这个时候其实并没有触发子组件 `prop` 的更新。但是在子组件的渲染过程中，访问过这个对象 `prop`，所以这个对象 `prop` 在触发 `getter` 的时候会把子组件的 `render watcher` 收集到依赖中，然后当我们在父组件更新这个对象 `prop` 的某个属性的时候，会触发 `setter` 过程，也就会通知子组件 `render watcher` 的 `update`，进而触发子组件的重新渲染。也就是说父组件的`prop`的更改直接触发了子组件`render watcher`的`update`。
 
 以上就是当父组件 `props` 更新，触发子组件重新渲染的 2 种情况。
+
+# 5. toggleObserving
+```js
+export let shouldObserve: boolean = true
+
+export function toggleObserving (value: boolean) {
+  shouldObserve = value
+}
+```
+
+它在当前模块中定义了 `shouldObserve` 变量，用来控制在 `observe` 的过程中是否需要把当前值变成一个 `Observer 对象`。
+
+那么为什么在 `props` 的初始化和更新过程中，多次执行 `toggleObserving(false)` 呢，接下来我们就来分析这几种情况。
+
+## 5.1 在 initProps 的过程中：
+```js
+const isRoot = !vm.$parent
+// root instance props should be converted
+if (!isRoot) {
+  toggleObserving(false)
+}
+for (const key in propsOptions) {
+  // ...
+  const value = validateProp(key, propsOptions, propsData, vm)
+  defineReactive(props, key, value)
+  // ...
+}
+toggleObserving(true)
+```
+
+对于`非根实例`的情况，我们会执行 `toggleObserving(false)`，然后对于每一个 `prop` 值，去执行 `defineReactive(props, key, value)` 去把它变成响应式。
+
+回顾一下 `defineReactive` 的定义：
+```js
+export function defineReactive (
+  obj: Object,
+  key: string,
+  val: any,
+  customSetter?: ?Function,
+  shallow?: boolean
+) {
+  // ...
+  
+  let childOb = !shallow && observe(val)
+  Object.defineProperty(obj, key, {
+    enumerable: true,
+    configurable: true,
+    get: function reactiveGetter () {
+      // ...
+    },
+    set: function reactiveSetter (newVal) {
+      // ...
+    }
+  })
+}
+```
+
+通常对于值 `val` 会执行 `observe` 函数，然后遇到 `val` 是`对象或者数组`的情况会递归执行 `defineReactive` 把它们的子属性都变成响应式的，但是由于 `shouldObserve` 的值变成了 `false`（影响了`observe`返回的值）这个递归过程被省略了。为什么会这样呢？
+
+因为正如我们前面分析的，对于对象的 `prop` 值，子组件的 `prop` 值始终指向`父组件的prop值`。只要`父组件的prop值`变化，就会触发`子组件的重新渲染`，所以这个 `observe` 过程是可以省略的。
+
+最后再执行 `toggleObserving(true)` 恢复 `shouldObserve 为 true。`
+
+## 5.2 在 validateProp 的过程中：
+```js
+// check default value
+if (value === undefined) {
+  value = getPropDefaultValue(vm, prop, key)
+  // since the default value is a fresh copy,
+  // make sure to observe it.
+  const prevShouldObserve = shouldObserve
+  toggleObserving(true)
+  observe(value)
+  toggleObserving(prevShouldObserve)
+}
+```
+这种是父组件没有传递 prop 值对`默认值`的处理逻辑，因为这个值是一个`拷贝`，所以我们需要 `toggleObserving(true)`，然后执行 `observe(value)` 把值变成响应式。
+
+## 5.3 在 updateChildComponent 过程中：
+```js
+if (propsData && vm.$options.props) {
+  toggleObserving(false)
+  const props = vm._props
+  const propKeys = vm.$options._propKeys || []
+  for (let i = 0; i < propKeys.length; i++) {
+    const key = propKeys[i]
+    const propOptions: any = vm.$options.props // wtf flow?
+    props[key] = validateProp(key, propOptions, propsData, vm)
+  }
+  toggleObserving(true)
+  // keep a copy of raw propsData
+  vm.$options.propsData = propsData
+}
+```
+其实和 `initProps` 的逻辑一样，不需要对`引用类型 props` 递归做响应式处理，所以也需要 `toggleObserving(false)`。
+
+# 总结：
+通过这一节的分析，我们了解了 props 的规范化、初始化、更新等过程的实现原理；
+也了解了 Vue 内部对 props 如何做响应式的优化；
+同时还了解到 props 的变化是如何触发子组件的更新。
+了解这些对我们平时对 props 的应用，遇到问题时的定位追踪会有很大的帮助。

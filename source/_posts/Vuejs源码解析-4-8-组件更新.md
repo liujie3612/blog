@@ -147,7 +147,7 @@ function sameVnode (a, b) {
 
 # 新旧节点不同
 
-如果新旧 `vnode` 不同，那么更新的逻辑非常简单，它本质上是要替换已存在的节点，大致分为 3 步:
+如果新旧 `vnode` 不同，那么更新的逻辑非常简单，它本质上是要替换已存在的节点，大致分为 **3 步**:
 
 ## 创建新节点
 ```js
@@ -335,7 +335,7 @@ function patchVnode (oldVnode, vnode, insertedVnodeQueue, removeOnly) {
     if (isDef(i = data.hook) && isDef(i = i.update)) i(oldVnode, vnode)
   }
 
-  // 3. 完成 patch 过程
+  // 3. 完成 patch 过程 这里最重要的是updateChildren
   if (isUndef(vnode.text)) {
     if (isDef(oldCh) && isDef(ch)) {
       if (oldCh !== ch) updateChildren(elm, oldCh, ch, insertedVnodeQueue, removeOnly)
@@ -469,6 +469,7 @@ if (isDef(data) && isPatchable(vnode)) {
 ## 完成 patch 过程
 
 如果 `vnode` 是个`文本节点`且`新旧文本不相同`，则`直接替换文本内容`。如果不是文本节点，则判断它们的`子节点`，并分了几种情况处理：
+
 1. `oldCh` 与 `ch` 都存在且不相同时，使用 `updateChildren` 函数来`更新子节点`，这个后面重点讲。
 2. 如果只有 `ch` 存在，表示旧节点不需要了。如果旧的节点是文本节点则先将节点的文本清除，然后通过 `addVnodes` 将 `ch` 批量插入到新节点 `elm` 下。
 3. 如果只有 `oldCh` 存在，表示更新的是`空节点`，则需要将旧的节点通过 `removeVnodes` 全部清除
