@@ -11,7 +11,7 @@ categories: Vue源码解析
 ---
 
 
-# 1. 初始化过程
+# 初始化过程
 
 侦听属性的初始化也是发生在 Vue 的实例初始化阶段的 `initState` 函数中，在 `computed 初始化之后`，执行了：
 
@@ -118,7 +118,7 @@ function stateMixin(Vue) {
 4. 如果我们设置了 `immediate` 为 `true`，则`直接会执行回调函数 cb`。
 5. 最后返回了一个 `unwatchFn` 方法，它会调用 `teardown` 方法去**移除**这个 `watcher`
 
-# 2. 依赖收集
+# 依赖收集
 
 ```js
 var vm = new Vue({
@@ -224,7 +224,7 @@ function parsePath(path) {
 
 ![](https://cdn.liujiefront.com/images/algorithm/k9178.png)
 
-## 2.1 deep options
+## deep options
 
 如果我们想对一下对象做深度观测的时候，需要设置 `deep` 这个属性为 `true`。
 
@@ -277,7 +277,7 @@ function _traverse(val, seen) {
 
 那么在执行了 traverse 后，我们再对 watch 的对象内部任何一个值做修改，也会调用 watcher 的回调函数了。
 
-# 3. 派发更新
+# 派发更新
 
 在这个例子中，当我们改变 `vm.watcher` 或者 `vm.watcher.msg` 的时候，都会触发相应的 `setter`，最后会执行 `watcher.run`
 
