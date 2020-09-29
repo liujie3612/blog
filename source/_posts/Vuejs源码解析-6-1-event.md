@@ -1,5 +1,5 @@
 ---
-title: Vuejs源码解析 6-1-event
+title: Vuejs源码解析 6-1 event
 date: 2020-09-11 17:26:16
 tags:
 - vue

@@ -173,3 +173,190 @@ const code = generate(ast, options)
 
 同样，Vue.js 也是利用`函数柯里化技巧`把`基础的编译过程函数`抽出来，通过 `createCompilerCreator(baseCompile)` 的方式把`真正编译的过程`和`其它逻辑如对编译配置处理`、`缓存处理`等剥离开，这样的设计还是非常巧妙的。
 
+# parse
+
+编译过程首先就是对模板做解析，生成 `AST`，它是一种`抽象语法树`，是对源代码的抽象语法结构的`树状表现形式`。在很多编译技术中，如 `babel` 编译 `ES6` 的代码都会先生成 `AST`。
+
+这个过程是比较复杂的，它会用到大量`正则表达式对字符串解析`，如果对正则不是很了解，建议先去补习正则表达式的知识。为了直观地演示 `parse` 的过程，我们先来看一个例子：
+
+```vue
+<ul :class="bindCls" class="list" v-if="isShow">
+    <li v-for="(item,index) in data" @click="clickItem(index)">{{item}}:{{index}}</li>
+</ul>
+```
+经过 `parse` 过程后，生成的 `AST` 如下：
+```js
+ast = {
+  'type': 1,
+  'tag': 'ul',
+  'attrsList': [],
+  'attrsMap': {
+    ':class': 'bindCls',
+    'class': 'list',
+    'v-if': 'isShow'
+  },
+  'if': 'isShow',
+  'ifConditions': [{
+    'exp': 'isShow',
+    'block': // ul ast element
+  }],
+  'parent': undefined,
+  'plain': false,
+  'staticClass': 'list',
+  'classBinding': 'bindCls',
+  'children': [{
+    'type': 1,
+    'tag': 'li',
+    'attrsList': [{
+      'name': '@click',
+      'value': 'clickItem(index)'
+    }],
+    'attrsMap': {
+      '@click': 'clickItem(index)',
+      'v-for': '(item,index) in data'
+     },
+    'parent': // ul ast element
+    'plain': false,
+    'events': {
+      'click': {
+        'value': 'clickItem(index)'
+      }
+    },
+    'hasBindings': true,
+    'for': 'data',
+    'alias': 'item',
+    'iterator1': 'index',
+    'children': [
+      'type': 2,
+      'expression': '_s(item)+":"+_s(index)'
+      'text': '{{item}}:{{index}}',
+      'tokens': [
+        {'@binding':'item'},
+        ':',
+        {'@binding':'index'}
+      ]
+    ]
+  }]
+}
+```
+可以看到，生成的 AST 是一个`树状结构`，每一个节点都是一个 `ast element`，除了它自身的一些属性，还维护了它的`父子关系`，如 `parent` 指向它的`父节点`，`children` 指向它的`所有子节点`。
+
+## 流程图
+
+![](https://cdn.liujiefront.com/images/algorithm/ssa2u.png)
+
+## 总结
+
+`parse` 的目标是把 `template` 模板字符串转换成 `AST 树`，它是一种用 `JavaScript 对象`的形式来描述整个模板。那么整个 `parse` 的过程是利用`正则表达式顺序解析模板`，当解析到`开始标签`、`闭合标签`、`文本`的时候都会分别执行对应的回调函数，来达到构造 AST 树的目的。
+
+AST 元素节点总共有` 3 种类型`：
+1. type 为 1 表示是`普通元素`
+2. type 为 2 表示是`表达式`
+3. type 为 3 表示是`纯文本`。
+
+# optimize 
+
+当我们的模板 `template` 经过 `parse` 过程后，会输出生成 `AST 树`，那么接下来我们需要对这颗树做`优化`，`optimize` 的逻辑是远简单于 `parse` 的逻辑，所以理解起来会轻松很多。
+
+为什么要有优化过程，因为我们知道 Vue 是数据驱动，是响应式的，但是我们的模板并不是`所有数据都是响应式的`，也有很多数据是首次渲染后就永远不会变化的，那么这部分数据生成的 DOM 也不会变化，我们可以在 patch 的过程跳过对他们的比对。
+
+经过 optimize 后，AST 树变成了如下：
+```js
+ast = {
+  'type': 1,
+  'tag': 'ul',
+  'attrsList': [],
+  'attrsMap': {
+    ':class': 'bindCls',
+    'class': 'list',
+    'v-if': 'isShow'
+  },
+  'if': 'isShow',
+  'ifConditions': [{
+    'exp': 'isShow',
+    'block': // ul ast element
+  }],
+  'parent': undefined,
+  'plain': false,
+  'staticClass': 'list',
+  'classBinding': 'bindCls',
+  'static': false,
+  'staticRoot': false,
+  'children': [{
+    'type': 1,
+    'tag': 'li',
+    'attrsList': [{
+      'name': '@click',
+      'value': 'clickItem(index)'
+    }],
+    'attrsMap': {
+      '@click': 'clickItem(index)',
+      'v-for': '(item,index) in data'
+     },
+    'parent': // ul ast element
+    'plain': false,
+    'events': {
+      'click': {
+        'value': 'clickItem(index)'
+      }
+    },
+    'hasBindings': true,
+    'for': 'data',
+    'alias': 'item',
+    'iterator1': 'index',
+    'static': false,
+    'staticRoot': false,
+    'children': [
+      'type': 2,
+      'expression': '_s(item)+":"+_s(index)'
+      'text': '{{item}}:{{index}}',
+      'tokens': [
+        {'@binding':'item'},
+        ':',
+        {'@binding':'index'}
+      ],
+      'static': false
+    ]
+  }]
+}
+```
+我们发现每一个 AST 元素节点都多了 `staic` 属性，并且 `type 为 1` 的普通元素 AST 节点多了 `staticRoot` 属性。
+
+`optimize` 的过程，就是**深度**遍历这个 `AST 树`，去检测它的每一颗子树是不是`静态节点`，如果是`静态节点`则它们生成 `DOM` 永远不需要改变，这对运行时对模板的更新起到极大的优化作用。
+
+我们通过 `optimize` 我们把整个 AST 树中的每一个 AST 元素节点标记了 `static` 和 `staticRoot`，它会影响我们接下来执行代码生成的过程。
+
+# codegen
+
+编译的最后一步就是把优化后的 AST 树转换成可执行的代码
+
+为了方便理解，我们还是用之前的例子：
+```js
+<ul :class="bindCls" class="list" v-if="isShow">
+    <li v-for="(item,index) in data" @click="clickItem(index)">{{item}}:{{index}}</li>
+</ul>
+```
+
+它经过编译，执行 `const code = generate(ast, options)`，生成的 `render` 代码串如下：
+
+```js
+with(this){
+  return (isShow) ?
+    _c('ul', {
+        staticClass: "list",
+        class: bindCls
+      },
+      _l((data), function(item, index) {
+        return _c('li', {
+          on: {
+            "click": function($event) {
+              clickItem(index)
+            }
+          }
+        },
+        [_v(_s(item) + ":" + _s(index))])
+      })
+    ) : _e()
+}
+```
+
