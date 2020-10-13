@@ -94,6 +94,7 @@
   {# {% include '_scripts/third-party/mathjax.swig' %} #}
   {# {% include '_scripts/third-party/lean-analytics.swig' %} #}
   {# {% include '_scripts/third-party/schedule.swig' %} #}
-
+  {# {% include '_scripts/third-party/fundebug.swig' %} #}
+  
 </body>
 </html>
