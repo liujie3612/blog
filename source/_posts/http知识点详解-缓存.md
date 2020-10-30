@@ -35,10 +35,13 @@ categories: 网络知识
 ## Expires
 是一个响应首部字段，它指定了一个日期/时间，在这个时间/日期之前，HTTP缓存被认为是有效的。无效的日期比如0，表示这个资源已经过期了。如果同时设置了Cache-Control响应首部字段的max-age，则Expires会被忽略。它也是HTTP/1.1之前版本遗留的通用首部字段，仅作为于HTTP/1.0的向后兼容而使用。
 
-## 控制协商缓存的字段
+# 控制协商缓存的字段
 
-1. `Last-Modified/If-Modified-Since` `If-Modified-Since`是一个`请求首部字段`，并且只能用在`GET`或者`HEAD`请求中。`Last-Modified`是一个`响应首部字段`，包含服务器认定的资源作出修改的日期及时间。当带着If-Modified-Since头访问服务器请求资源时，服务器会检查Last-Modified，如果Last-Modified的时间早于或等于If-Modified-Since则会返回一个不带主体的304响应，否则将重新返回资源。
-2. `ETag/If-None-Match` `ETag`是一个`响应首部字段`，它是根据实体内容生成的一段hash字符串，标识资源的状态，由服务端产生。`If-None-Match`是一个条件式的`请求首部`。如果请求资源时在请求首部加上这个字段，值为之前服务器端返回的资源上的ETag，则当且仅当服务器上没有任何资源的ETag属性值与这个首部中列出的时候，服务器才会返回带有所请求资源实体的200响应，否则服务器会返回不带实体的304响应。ETag优先级比Last-Modified高，同时存在时会以ETag为准。
+## Last-Modified/If-Modified-Since 
+`If-Modified-Since`是一个`请求首部字段`，并且只能用在`GET`或者`HEAD`请求中。`Last-Modified`是一个`响应首部字段`，包含服务器认定的资源作出修改的日期及时间。当带着If-Modified-Since头访问服务器请求资源时，服务器会检查Last-Modified，如果Last-Modified的时间早于或等于If-Modified-Since则会返回一个不带主体的304响应，否则将重新返回资源。
+
+## ETag/If-None-Match 
+`ETag`是一个`响应首部字段`，它是根据实体内容生成的一段hash字符串，标识资源的状态，由服务端产生。`If-None-Match`是一个条件式的`请求首部`。如果请求资源时在请求首部加上这个字段，值为之前服务器端返回的资源上的ETag，则当且仅当服务器上没有任何资源的ETag属性值与这个首部中列出的时候，服务器才会返回带有所请求资源实体的200响应，否则服务器会返回不带实体的304响应。ETag优先级比Last-Modified高，同时存在时会以ETag为准。
 
 ![](https://tva1.sinaimg.cn/large/0081Kckwly1gk7e7k298oj30ws0aymy0.jpg)
 
