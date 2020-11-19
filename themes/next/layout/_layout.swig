@@ -85,7 +85,7 @@
 
   {% block script_extra %}{% endblock %}
   {% include '_scripts/boostrap.swig' %}
-  {% include '_scripts/fundebug.swig' %}
+  <!-- {% include '_scripts/fundebug.swig' %} -->
   {% include '_scripts/baidu-push.swig' %}
   {# {% include '_scripts/third-party/gradient.swig' %} #}
   {# {% include '_scripts/third-party/canvas.swig' %} #}

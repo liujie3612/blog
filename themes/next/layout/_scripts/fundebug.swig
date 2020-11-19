@@ -9,7 +9,7 @@
 <script type="text/javascript" src="https://cdn.liujiefront.com/js/fundebug/fundebug.revideo.0.6.0.min.js"></script>
 {% endfor %} -->
 
-{%
+<!-- {%
   set js_commons = [
     'https://cdn.liujiefront.com/hexo/js/msb_monitor.js'
   ]
@@ -17,4 +17,4 @@
 
 {% for common in js_commons %}
 <script type="text/javascript" src="{{ common }}?v={{ theme.version }}"></script>
-{% endfor %}
+{% endfor %} -->

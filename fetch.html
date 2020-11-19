@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function handleFetchQueue(urls, max, callback) {
+      const urlCount = urls.length;
+      const requestsQueue = [];
+      const results = [];
+      let i = 0;
+
+      const handleRequest = (url) => {
+        // 请求返回的结果
+        const req = fetch(url).then(res => {
+          // 下面的end request谁这里的res就是谁
+          // requestsQueue 已经被推满了4个
+          // results 不断的增加
+
+          const len = results.push(res);
+
+          console.log({
+            res,
+            requestsQueue,
+            results,
+            i
+          })
+
+         // i + 1 < urlCount 最后的时候i不增加了，但是len 还是会增加
+         // 不加这个条件会导致再发送几个请求，但是结果没什么影响
+          if (len < urlCount && i + 1 < urlCount) {
+            requestsQueue.shift();
+            handleRequest(urls[++i])
+          } else if (len === urlCount) {
+            'function' === typeof callback && callback(results)
+          }
+        }).catch(e => {
+          results.push(e)
+        });
+
+        // console.log(req)
+        // 连发四个
+        if (requestsQueue.push(req) < max) {
+          console.log({ i })
+          handleRequest(urls[++i])
+        }
+      };
+
+
+      handleRequest(urls[i])
+    }
+
+
+    const urls = Array.from({length: 10}, (v, k) => k);
+
+    const fetch = function (idx) {
+      return new Promise(resolve => {
+        console.log(`start request ${idx}`);
+        const timeout = parseInt(Math.random() * 1e4);
+        setTimeout(() => {
+          console.log(`end request ${idx}`);
+          resolve(idx)
+        }, timeout)
+      })
+    };
+
+    const max = 4;
+
+    const callback = (results) => {
+      console.log('最终结果', results);
+    };
+
+
+    handleFetchQueue(urls, max, callback);
+    // 
+  </script>
+
+  <script>
+    // function handleFetchQueue(urls, max, callback) {
+    //   const urlCount = urls.length;
+    //   const requestsQueue = [];
+    //   const results = [];
+    //   let i = 0;
+
+    //   const handleRequest = url => {
+    //     // req部分
+    //     const req = fetchFunc(url).then(res => {
+    //       results.push(res);
+    //       console.log(results)
+    //     }).catch(e => {
+    //       // 报错不用关注
+    //       results.push(e);
+    //     }).finally(() => {
+    //       const len = results.length;
+    //       // console.log(len)
+    //       if (len < urlCount) {
+    //         // 完成请求就出队
+    //         requestsQueue.shift();
+    //         handleRequest(urls[++i]);
+    //       } else if (len === urlCount) {
+    //         "function" === typeof callback && callback(results);
+    //       }
+    //     });
+
+    //     // console.log('req:', req)
+    //     requestsQueue.push(req);
+    //     // console.log('requestsQueue:', requestsQueue)
+
+    //     // 只要满足就继续请求
+    //     if (requestsQueue.length <= max) {
+    //       console.log({i})
+    //       handleRequest(urls[++i]);
+    //     }
+    //   };
+    //   // console.log(i)
+    //   handleRequest(urls[i]);
+    // }
+
+    // const urls = Array.from({ length: 10 }, (v, k) => k);
+
+    // const fetchFunc = function (idx) {
+    //   return new Promise(resolve => {
+    //     // console.log(`start request ${idx}`);
+    //     const timeout = parseInt(Math.random() * 1e4);
+    //     setTimeout(() => {
+    //       resolve(idx)
+    //     }, timeout)
+    //   })
+    // };
+
+    // const max = 4;
+
+    // const callback = (results) => {
+    //   console.log('最终结果', results);
+    // };
+
+
+    // handleFetchQueue(urls, max, callback);
+  </script>
+</body>
+
+</html>
